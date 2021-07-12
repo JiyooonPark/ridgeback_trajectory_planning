@@ -1,0 +1,34 @@
+2020:1
+Christianity and the World:3:A
+Reading Classics and Writing:2:A+
+Linear Algebra I:3:A+
+Discrete Mathematics:3:A+
+Automata and Formal Languages:3:A+
+Digital Logic Design:3:A+
+Software-based Convergence System Design:3:A+
+Software Leadership Seminar:1:S
+2020:summer
+Object-Orient Programming:3:A+
+SW-Individual Study I:1:S
+2020:2
+Data Structure:3:A+
+Computer Architecture :3:A+
+Numerical Methods:3:A+
+Java Programming and Labs:3:A+
+Capstone Design Project A:3:A+
+Scientific Computation Programming:3:A+
+System Software and Labs:3:A+
+Open Software Platform:3:A+
+2020:winter
+Probability and Statistics:3:A+
+SW-Individual Study IV:1:S
+2021:1
+French I:2:A
+Numerical Analysis:3:A
+Operating Systems:3:A+
+Artificial Intelligence:3:A
+Computer Algorithm:3:A+
+Computer Networks and Communications:3:A+
+Capstone Design Project B:3:A+
+Scientific Computation Algorithms:3:A
+:
