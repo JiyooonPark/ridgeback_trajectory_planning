@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>TSP Pen Art using a Mobile Manipulator Robot</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="assets/css/styles.min.css">
     <link rel="stylesheet" href="assets/bootstrap/css/an-old-hope.min.css">
     <script>hljs.highlightAll();</script>
@@ -15,149 +20,230 @@
         <div class="overlay" style="background: rgb(0,0,0);opacity: 0.7;"></div>
         <div class="container">
             <div class="row">
-                <div class="col-md-10 col-lg-8 mx-auto position-relative" style="margin-right: 160px;margin-left: 160px;padding-right: 20px;padding-left: 20px;">
+                <div class="col-md-10 col-lg-8 mx-auto position-relative"
+                    style="margin-right: 160px;margin-left: 160px;padding-right: 20px;padding-left: 20px;">
                     <div class="post-heading" style="text-align: center;padding: 130px 0px;">
-                        <h1 style="text-align: center;font-family: 'Open Sans', sans-serif;font-size: 32px;font-weight: 500;padding: 0px;padding-right: -20px;padding-left: -20px; padding-bottom: 10px">
+                        <h1
+                            style="text-align: center;font-family: 'Open Sans', sans-serif;font-size: 32px;font-weight: 500;padding: 0px;padding-right: -20px;padding-left: -20px; padding-bottom: 10px">
                             <strong>TSP Pen Art using a Mobile Manipulator Robot</strong><br>
                         </h1>
-                        <h2 class="subheading" style="text-align: center;font-family: 'Open Sans', sans-serif;font-weight:400;font-size: 18px;line-height: 30px;">
-                            <a href="http://mimi12.github.io" target="_blank"><font color="white">Eunjung Lim, </font></a>
-                            <a href="https://github.com/jiyoonpark0207" target="_blank"><font color="white">Jiyoon Park, </font></a>
-                            <a href="https://daeunsong.github.io" target="_blank"><font color="white">Daeun Song</font></a> and Young J. Kim<br>
+                        <h2 class="subheading"
+                            style="text-align: center;font-family: 'Open Sans', sans-serif;font-weight:400;font-size: 18px;line-height: 30px;">
+                            <a href="http://mimi12.github.io" target="_blank">
+                                <font color="white">Eunjung Lim, </font>
+                            </a>
+                            <a href="https://github.com/jiyoonpark0207" target="_blank">
+                                <font color="white">Jiyoon Park, </font>
+                            </a>
+                            <a href="https://daeunsong.github.io" target="_blank">
+                                <font color="white">Daeun Song</font>
+                            </a> and Young J. Kim<br>
                         </h2>
-                        <span class="meta" style="font-size: 16px;font-style: italic;font-family: 'Open Sans', sans-serif;line-height: 24px">
+                        <span class="meta"
+                            style="font-size: 16px;font-style: italic;font-family: 'Open Sans', sans-serif;line-height: 24px">
                             <strong><em>extended abstract, KCGS Korea Computer Graphics Society, 2021</em></strong><br>
                         </span>
-                        <span class="meta" style="font-size: 14px;font-style: normal;font-family: 'Open Sans', sans-serif;margin-top: 20px; "><br />
-                            <a class="btn ash-grey rounded" style="margin-bottom:2px;color: rgba(0,0,0,0.78)" href="20210611A026_2.pdf" target="_blank">📄 PDF (KCGS 2021)</a>
-                            <a class="btn ash-grey rounded" style="margin-bottom:2px;color: rgba(0,0,0,0.78)" href="KCGS_O24_ppt.pdf" target="_blank">📄 PPT (KCGS 2021)</a>
+                        <span class="meta"
+                            style="font-size: 14px;font-style: normal;font-family: 'Open Sans', sans-serif;margin-top: 20px; "><br />
+                            <a class="btn ash-grey rounded" style="margin-bottom:2px;color: rgba(0,0,0,0.78)"
+                                href="20210611A026_2.pdf" target="_blank">📄 PDF (KCGS 2021)</a>
+                            <a class="btn ash-grey rounded" style="margin-bottom:2px;color: rgba(0,0,0,0.78)"
+                                href="KCGS_O24_ppt.pdf" target="_blank">📄 PPT (KCGS 2021)</a>
                             <br>
-                            <a class="btn ash-grey rounded" style="margin-bottom:2px;color: rgba(0,0,0,0.78)"  href="http://graphics.ewha.ac.kr/ssk/" target="_blank">🏠 Related Work</a>
+                            <a class="btn ash-grey rounded" style="margin-bottom:2px;color: rgba(0,0,0,0.78)"
+                                href="http://graphics.ewha.ac.kr/ssk/" target="_blank">🏠 Related Work</a>
                         </span>
-                        
-                    </div></div></div></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
 
     <article>
         <div class="container">
             <div class="row">
-                <div class="col-md-10 col-lg-8 mx-auto" style="margin-right: 160px;margin-left: 160px;font-family: 'Open Sans', sans-serif;">
-                    <p style="font-size: 16px;margin: 0px 0px 20px 0px;margin-top: 20px;margin-bottom: 10px;font-family: 'Open Sans', sans-serif;">
+                <div class="col-md-10 col-lg-8 mx-auto"
+                    style="margin-right: 160px;margin-left: 160px;font-family: 'Open Sans', sans-serif;">
+                    <p
+                        style="font-size: 16px;margin: 0px 0px 20px 0px;margin-top: 20px;margin-bottom: 10px;font-family: 'Open Sans', sans-serif;">
                         <strong><em>KCGS 2021, Got The Best Undergrad Paper Award</em></strong><br>
                     </p>
                     <div class="video-container">
-                        <iframe width="560" height="315" src="https://www.youtube.com/embed/Ao3ZdO45vRA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/3wg57vq3o9Q"
+                            title="YouTube video player" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
                     </div>
-                    <hr style="margin-right: -10px;margin-left: -10px;"><h2 class="section-heading" style="font-size: 24px;margin-top: 20px;margin-bottom: 10px;">Abstracts</h2><p style="font-size: 16px;margin: 0px 0px 20px 0px;margin-top: 20px;margin-bottom: 10px;font-family: 'Open Sans', sans-serif;"><strong><em>KCGS 2021</em></strong><br></p>
-                    <p style="font-size: 14px;margin: 0px;margin-bottom: 10px;text-align: justify;font-family: 'Open Sans', sans-serif;line-height: 24px;color: rgba(33,37,41,0.7);">
-                        We present a robotic pen-drawing system that is capable of replicating images on a large scale surface using TSP art.
-                        We use the Traveling Salesman Problem (TSP) to convert arbitrary input raster images into robot drawable vector image. Our robotic system relies on an industrial  seven-degree-of-freedom (7DoF) manipulator that is placed on top of a holonomic mobile base robot. Our system uses the mobile base to draw the converted vector image on large surfaces.  
-                        We demonstrate that our system can generate vector images for robotic drawing using weighted Voronoi Stippling and TSP Art to create pen art with high replication rate on large surfaces.
+                    <hr style="margin-right: -10px;margin-left: -10px;">
+                    <h2 class="section-heading" style="font-size: 24px;margin-top: 20px;margin-bottom: 10px;">Abstracts
+                    </h2>
+                    <p
+                        style="font-size: 16px;margin: 0px 0px 20px 0px;margin-top: 20px;margin-bottom: 10px;font-family: 'Open Sans', sans-serif;">
+                        <strong><em>KCGS 2021</em></strong><br>
+                    </p>
+                    <p
+                        style="font-size: 14px;margin: 0px;margin-bottom: 10px;text-align: justify;font-family: 'Open Sans', sans-serif;line-height: 24px;color: rgba(33,37,41,0.7);">
+                        We present a robotic pen-drawing system that is capable of replicating images on a large-scale
+                        surface using TSP art. We
+                        use the Traveling Salesman Problem (TSP) to convert arbitrary input raster images into robot
+                        drawable vector images. Our
+                        robotic system relies on an industrial seven-degree-of-freedom (7DoF) manipulator that is placed
+                        on top of a holonomic
+                        mobile base robot. Our system uses the mobile base to draw the converted vector image on large
+                        surfaces. We demonstrate
+                        that our system can generate vector images for robotic drawing using weighted Voronoi Stippling
+                        and TSP Art to create
+                        pen art with a high replication rate on large surfaces.
                         <br>
                     </p>
-                </p>
-                <figure>
-                    <blockquote class="blockquote"><p class="mb-0"></p></blockquote></figure><a href="#"></a><hr style="margin-right: -10px;margin-left: -10px;"><h2 class="section-heading" style="font-size: 24px;margin-top: 20px;margin-bottom: 10px;">
-                    System Overview
-                </h2>
-                <center>
-                    <div class="full"><span class="image fit">
-                    <img src="assets/img/system_overview.jpg" />  </span></div>
-                    
-                </center>
-                    </p><figure><blockquote class="blockquote"><p class="mb-0"></p></blockquote></figure><a href="#"></a><hr style="margin-right: -10px;margin-left: -10px;"><h2 class="section-heading" style="font-size: 24px;margin-top: 20px;margin-bottom: 10px;">
+                    </p>
+                    <figure>
+                        <blockquote class="blockquote">
+                            <p class="mb-0"></p>
+                        </blockquote>
+                    </figure><a href="#"></a>
+                    <hr style="margin-right: -10px;margin-left: -10px;">
+                    <h2 class="section-heading" style="font-size: 24px;margin-top: 20px;margin-bottom: 10px;">
+                        System Overview
+                    </h2>
+                    <center>
+                        <div class="full"><span class="image fit">
+                                <img src="assets/img/system_overview.jpg" /> </span></div>
+
+                    </center>
+                    </p>
+                    <figure>
+                        <blockquote class="blockquote">
+                            <p class="mb-0"></p>
+                        </blockquote>
+                    </figure><a href="#"></a>
+                    <hr style="margin-right: -10px;margin-left: -10px;">
+                    <h2 class="section-heading" style="font-size: 24px;margin-top: 20px;margin-bottom: 10px;">
                         Drawing Results
                     </h2>
-                    <p style="font-size: 16px;margin: 0px 0px 20px 0px;margin-top: 20px;margin-bottom: 10px;font-family: 'Open Sans', sans-serif;">
+                    <p
+                        style="font-size: 16px;margin: 0px 0px 20px 0px;margin-top: 20px;margin-bottom: 10px;font-family: 'Open Sans', sans-serif;">
                         <strong><em>Pen Drawing Results</em></strong><br>
                     </p>
                     <center>
                         <div class="half"><span class="image fit">
-                        <img src="assets/img/input/flowers.jpg" /> Input image </span></div>
+                                <img src="assets/img/input/flowers.jpg" /> Input image </span></div>
                         <div class="half"><span class="image fit">
-                        <img src="assets/img/results/flower.jpg" /> Flower </span></div>
+                                <img src="assets/img/results/flower.JPG" /> Flower </span></div>
                         <div class="half"><span class="image fit">
-                        <img src="assets/img/input/heart.jpg" /> Input image  </span></div>
+                                <img src="assets/img/input/heart.jpg" /> Input image </span></div>
                         <div class="half"><span class="image fit">
-                        <img src="assets/img/results/heart.jpg" /> Heart</span></div>
+                                <img src="assets/img/results/heart.jpg" /> Heart</span></div>
                         <div class="half"><span class="image fit">
-                        <img src="assets/img/input/hug.jpg" /> Input image  </span></div>
+                                <img src="assets/img/input/hug.jpg" /> Input image </span></div>
                         <div class="half"><span class="image fit">
-                        <img src="assets/img/results/hug.jpg" /> Character </span></div>
-                        
+                                <img src="assets/img/results/hug.jpg" /> Character </span></div>
+
                     </center>
 
-                    
-                <hr style="margin-right: -10px;margin-left: -10px;">
-                <p style="font-size: 16px;margin: 0px 0px 20px 0px;margin-top: 20px;margin-bottom: 10px;font-family: 'Open Sans', sans-serif;">
-                    <strong><em>Drawing Statistics</em></strong><br>
-                </p>
-                <center>
-                    <table class="table" style="font-size: 11px; text-align:center">
-                        <thead>
-                            <tr>
-                                
-                                <th></th>
-                                <th>Heart</th>
-                                <th>Character</th>
-                                <th>Flower</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div style="text-align:right">Canvas Size (m)</div>
-                                </td>
-                                <td>0.40 x 0.35</td>
-                                <td>0.60 x 0.40</td>
-                                <td>0.85 x 0.30 </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div style="text-align:right"># of Points used for Stippling </div>
-                                </td>
-                                <td>34,849</td>
-                                <td>31,151</td>
-                                <td>95,155</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div style="text-align:right">TSP time<div>
-                                </td>
-                                <td>6 min</td>
-                                <td>36 min</td>
-                                <td>97 min</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div style="text-align:right">Drawing Time</div>
-                                </td>
-                                <td>120 min</td>
-                                <td>110 min</Td>
-                                <td>585 min</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </center><BR>
+
+                    <hr style="margin-right: -10px;margin-left: -10px;">
+                    <p
+                        style="font-size: 16px;margin: 0px 0px 20px 0px;margin-top: 20px;margin-bottom: 10px;font-family: 'Open Sans', sans-serif;">
+                        <strong><em>Drawing Statistics</em></strong><br>
+                    </p>
+                    <center>
+                        <table class="table" style="font-size: 11px; text-align:center">
+                            <thead>
+                                <tr>
+
+                                    <th></th>
+                                    <th>Heart</th>
+                                    <th>Character</th>
+                                    <th>Flower</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div style="text-align:right">Canvas Size (m)</div>
+                                    </td>
+                                    <td>0.40 x 0.35</td>
+                                    <td>0.60 x 0.40</td>
+                                    <td>0.85 x 0.30 </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div style="text-align:right"># of Points used for Stippling </div>
+                                    </td>
+                                    <td>34,849</td>
+                                    <td>31,151</td>
+                                    <td>95,155</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div style="text-align:right">TSP time<div>
+                                    </td>
+                                    <td>6 min</td>
+                                    <td>36 min</td>
+                                    <td>97 min</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div style="text-align:right">Drawing Time</div>
+                                    </td>
+                                    <td>120 min</td>
+                                    <td>110 min</Td>
+                                    <td>585 min</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </center><BR>
 
 
-                
-                <hr style="margin-right: -10px;margin-left: -10px;"><h2 class="section-heading" style="font-size: 24px;margin-top: 20px;margin-bottom: 10px;">Contact</h2><p style="font-size: 16px;margin: 0px 0px 20px 0px;margin-top: 20px;margin-bottom: 10px;font-family: 'Open Sans', sans-serif;"><strong><em>Ewha Computer Graphics Lab</em></strong><br></p><p style="font-size: 14px; line-height: 28px; margin: 0px;margin-bottom: 10px;text-align: left;font-family: 'Open Sans', sans-serif;margin-top: 0px;"><strong>Department of Computer Science &amp; Engineering, Ewha Womans University</strong><br />📍 52, Ewhayeodae-gil, Seodaemun-gu, Seoul, Korea, 03760<br />📞 +82-2-3277-6798<br /></p>
+
+                    <hr style="margin-right: -10px;margin-left: -10px;">
+                    <h2 class="section-heading" style="font-size: 24px;margin-top: 20px;margin-bottom: 10px;">Contact
+                    </h2>
+                    <p
+                        style="font-size: 16px;margin: 0px 0px 20px 0px;margin-top: 20px;margin-bottom: 10px;font-family: 'Open Sans', sans-serif;">
+                        <strong><em>Ewha Computer Graphics Lab</em></strong><br>
+                    </p>
+                    <p
+                        style="font-size: 14px; line-height: 28px; margin: 0px;margin-bottom: 10px;text-align: left;font-family: 'Open Sans', sans-serif;margin-top: 0px;">
+                        <strong>Department of Computer Science &amp; Engineering, Ewha Womans
+                            University</strong><br />📍 52, Ewhayeodae-gil, Seodaemun-gu, Seoul, Korea, 03760<br />📞
+                        +82-2-3277-6798<br />
+                    </p>
                     <ul class="list-inline text-left" style="padding:18px;margin: 0px">
-                        <li class="list-inline-item"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><a href="http://graphics.ewha.ac.kr/" target="_blank"><i class="fa fa-home fa-stack-1x fa-inverse"></i></a></span></li>
-                        <li class="list-inline-item"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><a href="https://www.facebook.com/ewhaglab/?ref=br_rs" target="_blank"><i class="fa fa-facebook fa-stack-1x fa-inverse"></i></a></span></li>
-                        <li class="list-inline-item"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><a href="https://www.youtube.com/user/EwhaGlab" target="_blank"><i class="fa fa-youtube fa-stack-1x fa-inverse"></i></a></span></li>
-                        <li class="list-inline-item"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><a href="mailto:jiyoonpark0207@gmail.com" target="_blank"><i class="fa fa-envelope fa-stack-1x fa-inverse"></i></a></span></li>
-                    </ul><p style="margin: 0px;margin-bottom: 0px;margin-top: 20px;text-align: left;font-family: 'Open Sans', sans-serif;font-size: 14px;line-height: 32px;">
-                        ✉️&nbsp;<a href="#" ><strong>Eunjung Lim</strong></a><sup>1</sup>, ejunglim12@ewhain.net<br>
-                        ✉️&nbsp;<a href="#" ><strong>Jiyoon Park</strong></a><sup>1</sup>, jiyoonpark13@ewhain.net<br>
-                        ✉️&nbsp;<a href="http://daeunsong.github.io" target="_blank"><strong>Daeun Song</strong></a><sup>1</sup>, daeunsong@ewhain.net<br>
-                        ✉️&nbsp;<a href="http://home.ewha.ac.kr/~kimy/" target="_blank"><strong>Young J. Kim</strong></a><sup>1</sup>, kimy@ewha.ac.kr<br>
-                        
-                        <sup>1</sup>&nbsp;Ewha Womans University, Korea<br></p>
-                    
-                    
-                    <div class="btn-toolbar"><div class="btn-group" role="group"></div><div class="btn-group" role="group"></div></div>
+                        <li class="list-inline-item"><span class="fa-stack fa-lg"><i
+                                    class="fa fa-circle fa-stack-2x"></i><a href="http://graphics.ewha.ac.kr/"
+                                    target="_blank"><i class="fa fa-home fa-stack-1x fa-inverse"></i></a></span></li>
+                        <li class="list-inline-item"><span class="fa-stack fa-lg"><i
+                                    class="fa fa-circle fa-stack-2x"></i><a
+                                    href="https://www.facebook.com/ewhaglab/?ref=br_rs" target="_blank"><i
+                                        class="fa fa-facebook fa-stack-1x fa-inverse"></i></a></span></li>
+                        <li class="list-inline-item"><span class="fa-stack fa-lg"><i
+                                    class="fa fa-circle fa-stack-2x"></i><a href="https://www.youtube.com/user/EwhaGlab"
+                                    target="_blank"><i class="fa fa-youtube fa-stack-1x fa-inverse"></i></a></span></li>
+                        <li class="list-inline-item"><span class="fa-stack fa-lg"><i
+                                    class="fa fa-circle fa-stack-2x"></i><a href="mailto:jiyoonpark0207@gmail.com"
+                                    target="_blank"><i class="fa fa-envelope fa-stack-1x fa-inverse"></i></a></span>
+                        </li>
+                    </ul>
+                    <p
+                        style="margin: 0px;margin-bottom: 0px;margin-top: 20px;text-align: left;font-family: 'Open Sans', sans-serif;font-size: 14px;line-height: 32px;">
+                        ✉️&nbsp;<a href="#"><strong>Eunjung Lim</strong></a><sup>1</sup>, ejunglim12@ewhain.net<br>
+                        ✉️&nbsp;<a href="#"><strong>Jiyoon Park</strong></a><sup>1</sup>, jiyoonpark13@ewhain.net<br>
+                        ✉️&nbsp;<a href="http://daeunsong.github.io" target="_blank"><strong>Daeun
+                                Song</strong></a><sup>1</sup>, daeunsong@ewhain.net<br>
+                        ✉️&nbsp;<a href="http://home.ewha.ac.kr/~kimy/" target="_blank"><strong>Young J.
+                                Kim</strong></a><sup>1</sup>, kimy@ewha.ac.kr<br>
+
+                        <sup>1</sup>&nbsp;Ewha Womans University, Korea<br>
+                    </p>
+
+
+                    <div class="btn-toolbar">
+                        <div class="btn-group" role="group"></div>
+                        <div class="btn-group" role="group"></div>
+                    </div>
                     <div class="btn-group" role="group">
 
                     </div>
@@ -167,12 +253,22 @@
     </article>
     <footer style="padding-top: 10px;padding-bottom: 20px;">
         <hr style="margin-top: 0px;margin-bottom: 0px;">
-        <div class="container"><div class="row">
-            <div class="col-md-10 col-lg-8 mx-auto">
-                <p class="text-muted copyright" style="font-size: 11px;font-family: 'Open Sans', sans-serif;">
-                    ©&nbsp;
-                    <a href="http://graphics.ewha.ac.kr/" target="_blank">Computer Graphics Lab</a>, Ewha Womans University, Korea | Last Updated: 2021-07-12<br></p></div></div></div></footer>
-                    <script src="assets/bootstrap/js/highlight.min.js"></script> 
-                    <script>hljs.initHighlightingOnLoad();</script>
-                    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-                    <script src="assets/js/script.min.js"></script></body></html>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-lg-8 mx-auto">
+                    <p class="text-muted copyright" style="font-size: 11px;font-family: 'Open Sans', sans-serif;">
+                        ©&nbsp;
+                        <a href="http://graphics.ewha.ac.kr/" target="_blank">Computer Graphics Lab</a>, Ewha Womans
+                        University, Korea | Last Updated: 2021-07-12<br>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="assets/bootstrap/js/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/script.min.js"></script>
+</body>
+
+</html>
