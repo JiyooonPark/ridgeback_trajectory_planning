@@ -1,8 +1,10 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.patches import Rectangle
+import time
+import math
 
-class Square():
+class Circle():
     def __init__(self, id, x, y, radius = 1):
         self.id = id
         self.center = [x, y]
@@ -11,11 +13,14 @@ class Square():
         self.overlapped = []
         self.limits = [x-radius, x+radius, y+ radius, y-radius]
         self.cover = 0
+    def in_circle(self, i, j):
+        return ((i-self.center[0])**2+(j-self.center[1])**2 - self.radius**2) <= 1
     def generate_points(self):
         cover = []
         for i in np.arange(self.center[0]-self.radius, self.center[0]+self.radius, 0.1):
            for j in np.arange(self.center[1]-self.radius, self.center[1]+self.radius, 0.1):
-               cover.append((round(i, 2), round(j,2)))
+               if self.in_circle(i, j):
+                    cover.append((round(i, 2), round(j,2)))
         return cover
     def update_overlap(self, steps):
         for s in steps:
@@ -27,13 +32,12 @@ class Square():
         else:
             return False
     def print_map(self):
-        currentAxis = plt.gca()
-        currentAxis.add_patch(Rectangle((self.limits[0], self.limits[3] ), self.radius*2, self.radius*2, fill=None, alpha=1))
-
+        circle = plt.Circle((self.center[0], self.center[1]), self.radius, fill=None, alpha=1)
+        plt.gca().add_patch(circle)
     def cover_amount(self, wall):
         count = 0
         for (x, y) in wall.uncovered:
-            if self.limits[0]<x<self.limits[1] and self.limits[3]<y<self.limits[2]:
+            if self.in_circle(x, y):
                 count+=1
             else:
                 continue
@@ -42,12 +46,11 @@ class Square():
     def cover_points(self, wall):
         c = []
         for (x, y) in zip(wall.xpoints, wall.ypoints):
-            if self.limits[0]<x<self.limits[1] and self.limits[3]<y<self.limits[2]:
+            if self.in_circle(x, y):
                 c.append((x, y))
             else:
                 continue
         return c
-
 class Wall:
     def __init__(self, x, y):
         self.covered = []
@@ -77,25 +80,25 @@ class Wall:
         s = []
         id = -1
         for (x, y) in self.uncovered:
-            s.append(Square(id, x, y))
+            s.append(Circle(id, x, y))
             id -= 1
         return s
-
 class Candidate:
     def __init__(self, plate):
         self.candidate = self.generate_c(plate)
     def generate_c(self, plate):
+        start = time.time()
         C = []
         id = 0
         for i in np.arange(plate[0], plate[1], 0.1):
-            for j in np.arange(plate[2], plate[3], 0.1):
-                if j< f(i):
-                    C.append(Square(id, round(i, 2), round(j, 2)))
+            for j in np.arange(Y().f1(i) - 4, Y().f1(i) + 4, 0.1):
+                if j< Y().f1(i):
+                    C.append(Circle(id, round(i, 2), round(j, 2)))
                     id += 1
+        print('points generated. Time:', time.time() - start)
         return C
     def delete_c(self, c):
         self.candidate.remove(c)
-
 def max_coverage(wall, C):
     selected = C[0]
     for c in C:
@@ -117,46 +120,65 @@ def greedy_cover(wall, C):
         square = max_coverage(wall, C.candidate)
         if square == None:
             break
-        square.print_map()
+        # square.print_map()
+        circle = plt.Circle((square.center[0], square.center[1]), square.radius, fill=None, alpha=1)
+        plt.gca().add_patch(circle)
+
         wall.add_covered(square)
         C.delete_c(square)
         steps.append(square)
-    plt.show()
     for s in steps:
         print(s.center, end="")
     return steps
-def F(x):
-    list = []
-    for X in x:
-        list.append( 3*np.sin(X) - (X-3))
-    return list
-import math
-def f(x):
-    return 3*math.sin(x) - (x-3)
-x_up= 20
+class Y:
+    def __init__(self, x=[]):
+        self.x = x
+        self.y = self.round_y()
+
+    def f1(self, x):
+        return 3 * math.sin(x) - (x - 3)
+
+    def f1_list(self, X):
+        list = []
+        for x in X:
+            list.append(self.f1(x))
+        return list
+    def round_y(self):
+        y = self.f1_list(self.x)
+        Y = []
+        for i in y:
+            Y.append(round(i, 2))
+        self.y = Y
+        return Y
+class X:
+    def __init__(self, x_down, x_up):
+        self.x_down = x_down
+        self.x_up = x_up
+        self.x = self.round_x_()
+    def generate_x(self, x_down, x_up, space = 0.1):
+        return np.arange(x_down, x_up, space)
+    def round_x_(self):
+        x = self.generate_x(self.x_down, self.x_up)
+        X = []
+        for i in x:
+            X.append(round(i, 2))
+        return X
+
+x_up= 10
 x_down = 0
 
-x = np.arange(x_down, x_up, 0.1)
-X = []
-for i in x:
-    X.append(round(i, 2))
-
-
-# y = np.sin(x * 0.5)
-y = F(X)
-Y = []
-for i in y:
-    Y.append(round(i, 2))
+x = X(x_down, x_up)
+y = Y(x.x)
 
 axes = plt.gca()
-axes.set_xlim([x_down, x_up])
+# axes.set_xlim([x_down, x_up])
 # axes.set_ylim([-10, 10])
-plt.plot(X, Y)
 
-wall = Wall(X, Y)
-C = Candidate([x_down, x_up, -20, 5])
+wall = Wall(x.x, y.y)
+C = Candidate([x_down, x_up, -10, 10])
 greedy_cover(wall, C)
 
+plt.plot(x.x, y.y)
 plt.show()
 
 
