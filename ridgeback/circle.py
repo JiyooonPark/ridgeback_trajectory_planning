@@ -14,10 +14,10 @@ class Circle():
         self.limits = [x-radius, x+radius, y+ radius, y-radius]
         self.cover = 0
     def in_circle(self, i, j):
-        return ((i-self.center[0])**2+(j-self.center[1])**2 - self.radius**2) <= 1
+        return ((i-self.center[0])**2+(j-self.center[1])**2 - self.radius**2) <= 0
     def generate_points(self):
         cover = []
-        for i in np.arange(self.center[0]-self.radius, self.center[0]+self.radius, 0.1):
+        for i in np.arange(self.center[0]-self.radius, self.center[0]+self.radius, 0.05):
            for j in np.arange(self.center[1]-self.radius, self.center[1]+self.radius, 0.1):
                if self.in_circle(i, j):
                     cover.append((round(i, 2), round(j,2)))
@@ -48,6 +48,7 @@ class Circle():
         for (x, y) in zip(wall.xpoints, wall.ypoints):
             if self.in_circle(x, y):
                 c.append((x, y))
+
             else:
                 continue
         return c
@@ -59,13 +60,18 @@ class Wall:
         self.ypoints = y
         self.squares = self.generate_squares()
     def add_covered(self, square):
+        cx = []
+        cy = []
         for (x, y) in square.cover_points(self):
             if (x, y) in self.uncovered:
                 print('('+str(x)+','+str(y)+')', end=' ')
                 self.covered.append((x, y))
                 self.uncovered.remove((x, y))
+                cx.append(x)
+                cy.append(y)
             else:
                 continue
+        plt.scatter(cx,cy, marker="|")
         print()
         # print('length uncovered:', len(self.uncovered), '/', len(self.uncovered)+len(self.covered))
         print('length covered:', len(self.covered), '/', len(self.uncovered)+len(self.covered))
@@ -84,19 +90,23 @@ class Wall:
             id -= 1
         return s
 class Candidate:
-    def __init__(self, plate):
+    def __init__(self, plate, wall):
         self.candidate = self.generate_c(plate)
+        self.wall = wall
     def generate_c(self, plate):
         start = time.time()
         C = []
         id = 0
-        for i in np.arange(plate[0], plate[1], 0.1):
-            for j in np.arange(Y().f1(i) - 4, Y().f1(i) + 4, 0.1):
-                if j< Y().f1(i):
-                    C.append(Circle(id, round(i, 2), round(j, 2)))
-                    id += 1
+        limit = 0.5
+        for i in np.arange(plate[0], plate[1], 0.05):
+            for j in np.arange(Y().f1(i) - 2, Y().f1(i) -limit, 0.1):
+                # if away_form_wall(i,j, limit):
+                C.append(Circle(id, round(i, 2), round(j, 2)))
+                id += 1
         print('points generated. Time:', time.time() - start)
         return C
+    def away_from_limit(self, x, y, limit):
+        pass
     def delete_c(self, c):
         self.candidate.remove(c)
 def max_coverage(wall, C):
@@ -121,6 +131,7 @@ def greedy_cover(wall, C):
         if square == None:
             break
         # square.print_map()
+        plt.scatter(square.center[0], square.center[1])
         circle = plt.Circle((square.center[0], square.center[1]), square.radius, fill=None, alpha=1)
         plt.gca().add_patch(circle)
 
@@ -129,6 +140,7 @@ def greedy_cover(wall, C):
         steps.append(square)
     for s in steps:
         print(s.center, end="")
+    print("path generated with", len(steps), "circles")
     return steps
 class Y:
     def __init__(self, x=[]):
@@ -155,7 +167,7 @@ class X:
         self.x_down = x_down
         self.x_up = x_up
         self.x = self.round_x_()
-    def generate_x(self, x_down, x_up, space = 0.1):
+    def generate_x(self, x_down, x_up, space = 0.05):
         return np.arange(x_down, x_up, space)
     def round_x_(self):
         x = self.generate_x(self.x_down, self.x_up)
@@ -175,10 +187,10 @@ axes = plt.gca()
 # axes.set_ylim([-10, 10])
 
 wall = Wall(x.x, y.y)
-C = Candidate([x_down, x_up, -10, 10])
+C = Candidate([x_down, x_up, -10, 10], wall)
 greedy_cover(wall, C)
 
-plt.plot(x.x, y.y)
+plt.plot(x.x, y.y ,color="grey")
 plt.show()
 
 
