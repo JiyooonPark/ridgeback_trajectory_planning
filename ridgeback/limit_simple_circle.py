@@ -193,7 +193,10 @@ class X:
         return X
 
 
-#
+def setting(circle):
+    print('c:', circle.center)
+    return circle.center[0]
+
 if __name__=="__main__":
 
     # 실제로는 필요가 없지만, plot으로 보기 위해 설정하는 x의 범위
@@ -211,7 +214,17 @@ if __name__=="__main__":
 
     # 후보 생성 및 그리디 알고리즘 적용
     C = Candidate([x_down, x_up, -10, 10], wall)
-    greedy_cover(wall, C)
+    steps = greedy_cover(wall, C)
+
+    sorted = sorted(steps, key=setting)
+    print('X:')
+    for s in sorted:
+        print(s.center[0], end=', ')
+    print('\nY:')
+    for s in sorted:
+        print(s.center[1], end=', ')
+
+
 
     # 그리는 부분
     plt.plot(x.x, y.y ,color="grey")
