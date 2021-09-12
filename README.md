@@ -1,34 +1,50 @@
-#:robot:Ridgeback Trajectory Planning
+# :robot:Ridgeback Trajectory Planning
 
-###Motivation:
+### Motivation:
 In taking our project to the next level, we wanted to allow our robot to draw on a large curved surface. This repository is for calculating the trajectory for following the curved wall. 
 
+
 ---
-###Input:
+
+### Input:
 Mesh wall in .obj file form 
-###Output:
+
+
+### Output:
 ridgeback trajectory
 
 something like this:
 ```angular2html
 X:-1.65, -0.86, -0.09, 1.64, 2.52, 3.6, 5.25, 5.27, 6.71, 7.09, 7.87, 9.79, 9.86
-Y:-4.0, -4.34, -4.4, -4.31, -4.52, -4.04, -3.64, -3.65, -4.69, -4.63, -4.34, -4.73, -4.84
+Y: -4.0, -4.34, -4.4, -4.31, -4.52, -4.04, -3.64, -3.65, -4.69, -4.63, -4.34, -4.73, -4.84
 ```
+
+
 ---
-###Problems:
+
+
+### Problems:
 The repository is still going under modifications. Currently, it is SUPER SLOW. So please wait until I am done working on it :smile:
 If you have any suggestions, your help will be greatly appreciated :smile:
+
+
 ---
-###How To Use:
+
+
+### How To Use:
 I warned you that it still need more work... but if you are willing to wait...:turtle:
 ```commandline
-1. place your .obj file in /input
-2. open trajectory_planning_v3.py
-3. change the file_name to your file 
+1. Place your .obj file in /input
+2. Open trajectory_planning_v3.py
+3. Change the file_name to your file 
 4. Hit run and WAIT
 5. Look at terminal for progress, result
 ```
-##Progress Stages
+
+
+<details>
+<summary> Progress Stages</summary>
+
 **2021.08.09**
 
 Started by covering simple wall with squares 
@@ -60,3 +76,5 @@ Realized that I have not considered the actual robots -> fixed the problem but n
 ![2021.09.11](/img/0911-1421.png)
 ![2021.09.11](/img/0911-1453.png)
 ![2021.09.11](/img/0911-1508.png)
+
+</details>
