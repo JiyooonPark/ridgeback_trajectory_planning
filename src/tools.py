@@ -1,7 +1,7 @@
 def open_file(filename, fileext):
     point = []
     wall = []
-    with open('input/' + filename + '.' + fileext) as f:
+    with open('../input/' + filename + '.' + fileext) as f:
         for line in f:
             if line[0] != 'v':
                 continue
