@@ -4,7 +4,7 @@ import time
 import math
 
 class Circle():
-    def __init__(self, id, x, y, radius = 0.3):
+    def __init__(self, id, x, y, radius = 0.6):
         self.id = id
         self.center = [x, y]
         self.radius = radius

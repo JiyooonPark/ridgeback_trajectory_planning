@@ -142,18 +142,17 @@ class Candidate:
 
 # 가장 많은 점을 커버하는
 def max_coverage(wall, C):
+    print(f'Length od C: {len(C)}')
     selected = C[0]
-    max_covered_points = 0
     for c in C:
-        covered_points = c.cover_amount_angle(wall)
-        if  covered_points > max_covered_points:
+        m = selected.cover_amount_angle(wall)
+        if c.cover_amount_angle(wall) > m:
             selected = c
-            max_covered_points = covered_points
         else:
             continue
-    print("max_coverage id:", selected.id, 'covers:', max_covered_points)
+    print("max_coverage id:", selected.id, 'covers:', m)
     selected.plot_direction()
-    if max_covered_points == 0:
+    if m == 0:
         return None
     return selected
 
@@ -164,6 +163,11 @@ def greedy_cover(wall, C):
     steps = []
     while not wall.allcovered():
         max_circle = max_coverage(wall, C.candidate)
+        if max_circle == None:
+            print('max_circle is none')
+            break
+        print('max_circle exists')
+        # plot circle
         plt.scatter(max_circle.r_center[0], max_circle.r_center[1], s=1)
         max_circle.print_map()
 

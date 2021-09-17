@@ -74,13 +74,16 @@ import matplotlib.pyplot as plt
 def point_in_circumference(r,n=6):
     pi = math.pi
     return [(round(math.cos(pi/n*x)*r, 2),round(-math.sin(pi/n*x)*r, 2)) for x in range(0,n+1)]
-res = point_in_circumference(10)
-print(res)
-x_list, y_list = [], []
-for x, y in res:
-    x_list.append(x)
-    y_list.append(y)
-plt.scatter(x_list, y_list)
-plt.grid(True)
-plt.gca().set_aspect('equal', adjustable='box')
-plt.show()
+
+if __name__=='__main__':
+
+    res = point_in_circumference(10)
+    print(res)
+    x_list, y_list = [], []
+    for x, y in res:
+        x_list.append(x)
+        y_list.append(y)
+    plt.scatter(x_list, y_list)
+    plt.grid(True)
+    plt.gca().set_aspect('equal', adjustable='box')
+    plt.show()

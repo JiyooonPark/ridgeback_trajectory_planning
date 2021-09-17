@@ -1,0 +1,62 @@
+class Iidgeback{
+	variable:
+		ridgeback_center = [rx, ry]
+		iiwa_center = [ix, iy]
+		orientation = 0
+}
+
+class Wall{
+    variable:
+        covered_points = []
+        uncovered_points = []
+}
+
+function cover_amount_angle(wall){
+    max_coverage_orientation = 0
+
+    for orientation in [0, 30, 60, 90, 120, 150, 180]:
+        calculate covered_points per orientation
+        update max_coverage_orientation if needed
+
+    return max_coverage_orientation
+}
+
+function max_coverage(wall, candidates){
+
+    max_iidgeback = candidates[0] # this will be an Iidgeback object
+    max_covered_points = 0
+
+    for every c in candidates:
+        covered_points = calculate which orientation covers most points on the wall using cover_amount_angle()
+        if covered_points > max_covered_points:
+                update max_covered_points
+                update max_iidgeback
+
+    return max_iidgeback
+}
+
+
+function greedy(wall, candidates){
+    steps_taken = [] # list that will store selected Iidgeback objects
+
+    while wall is not all covered:
+
+        max_iidgeback = max_coverage( wall, candidates )
+
+        update wall.covered_points & wall.uncovered_points
+        delete max_circle form candidate
+        add max_iidgeback to steps_taken
+
+    return steps_taken
+}
+
+function generate_candidates(wall){
+    IR = [] # list that will store Iidgeback objects
+
+    for i in [wall.x]:
+        for j in [wall.y[i] + 0.2 to wall.y[i] + 1 at 0.05 interval]:
+            candidate = object of Iidgeback that has ridgeback_center at [i, j]
+            IR.append(candidate)
+
+    return IR
+}
