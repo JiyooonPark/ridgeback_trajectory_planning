@@ -16,7 +16,7 @@ def open_file(filename, fileext):
             wall.append(point)
     return wall
 
-def plot_wall(wall):
+def plot_wall(wall, size=0.4):
     x_wall = []
     y_wall = []
     z_wall = []
@@ -29,17 +29,17 @@ def plot_wall(wall):
         z_wall.append(z)
     plt.figure(figsize=(20, 3))
     if x_wall[0] == 0:
-        plt.scatter(y_wall, z_wall, c='indigo', s=0.4, marker=marker_shape)
+        plt.scatter(y_wall, z_wall, c='indigo', s=size, marker=marker_shape)
         print('zero: x')
+        return y_wall, z_wall
     elif y_wall[0] == 0:
-        plt.scatter(x_wall, z_wall, c='indigo', s=0.4, marker=marker_shape)
+        plt.scatter(x_wall, z_wall, c='indigo', s=size, marker=marker_shape)
         print('zero: y')
+        return x_wall, z_wall
     elif z_wall[0] == 0:
-        plt.scatter(x_wall, y_wall, c='indigo', s=0.4, marker=marker_shape)
+        plt.scatter(x_wall, y_wall, c='indigo', s=size, marker=marker_shape)
         print('zero: z')
-    else:
-        print('no axis with zero value')
-    plt.show()
+        return x_wall, y_wall
 
 if __name__=='__main__':
     filename = "smooth_curve"

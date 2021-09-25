@@ -1,48 +1,50 @@
 import matplotlib.pyplot as plt
+import numpy
 
-def open_file(filename, fileext):
-    point = []
-    wall = []
-    with open('../input/'+filename+'.'+fileext) as f:
-        for line in f:
-            if line[0]!='v':
-                continue
-            for word in line.split():
-                if word =='v':
-                    point = []
-                    continue
-                else:
-                    point.append(float(word))
-            wall.append(point)
-    return wall
+from plot_input import *
+import numpy as np
 
-def plot_wall(wall):
-    x_wall = []
-    y_wall = []
-    z_wall = []
+def draw_tangent_line(p1, p2):
+    # plt.plot(p1, p2)
+    plt.axline( (p1[0], p2[0]), (p1[1], p2[1]))
 
-    marker_shape="o"
+def draw_multiple_tangent_lines(x, y):
+    for i in range(len(x)-1):
+        draw_tangent_line(x[i:i+2], y[i:i+2])
 
-    for [x, y, z] in wall:
-        x_wall.append(x)
-        y_wall.append(y)
-        z_wall.append(z)
-    plt.figure(figsize=(20, 3))
-    if x_wall[0] == 0:
-        plt.scatter(y_wall, z_wall, c='indigo', s=0.4, marker=marker_shape)
-        print('zero: x')
-    elif y_wall[0] == 0:
-        plt.scatter(x_wall, z_wall, c='indigo', s=0.4, marker=marker_shape)
-        print('zero: y')
-    elif z_wall[0] == 0:
-        plt.scatter(x_wall, y_wall, c='indigo', s=0.4, marker=marker_shape)
-        print('zero: z')
-    else:
-        print('no axis with zero value')
-    plt.show()
+def draw_two_tangent_lines(x, y):
+    # draw_multiple_tangent_lines(x[::len(x)//3], y[::len(y)//3])
+    draw_multiple_tangent_lines((x[0], x[len(x) // 2], x[-1]), (y[0], y[len(y) // 2], y[-1]))
+    plt.scatter(x[0], y[0], c='red', s=100)
+    plt.scatter(x[len(x) // 2], y[len(y) // 2], c='red', s=100)
+    plt.scatter(x[-1], y[-1], c='red', s=100)
+
+def between_angle(x, y):
+    vector_1 = numpy.array([x[0], y[0]]) - numpy.array([x[len(x) // 2], y[len(y) // 2]])
+    vector_2 = numpy.array([x[len(x) // 2],  y[len(y) // 2]]) - np.array([x[-1], y[-1]])
+
+    unit_vector_1 = vector_1 / np.linalg.norm(vector_1)
+    unit_vector_2 = vector_2 / np.linalg.norm(vector_2)
+    dot_product = np.dot(unit_vector_1, unit_vector_2)
+    angle = np.arccos(dot_product)
+    print(vector_1, vector_2)
+    print(angle)
+    print(angle*90)
+    # plt.text([x[len(x) // 2]-0.2,  y[len(y) // 2]-0.2], f'{angle*90}', s=1)
+    plt.text(x[len(x) // 2]-0.2,  y[len(y) // 2]-0.2, f'{round(angle*90, 2)}', fontsize=10)
+
 
 if __name__=='__main__':
     filename = "smooth_curve"
     fileext='txt'
     wall = open_file(filename, fileext)
-    plot_wall(wall)
+    x, y = plot_wall(wall, 100)
+    # draw_multiple_tangent_lines(x[7:16], y[7:16])
+    # draw_two_tangent_lines(x, y)
+    # draw_two_tangent_lines(x[2:25], y[2:25])
+
+    range_1, range_2 = 30, 60
+    draw_two_tangent_lines(x[range_1:range_2], y[range_1:range_2])
+    between_angle(x[range_1:range_2], y[range_1:range_2])
+    plt.show()
+
