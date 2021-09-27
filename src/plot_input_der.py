@@ -44,7 +44,7 @@ if __name__=='__main__':
     # draw_two_tangent_lines(x[2:25], y[2:25])
 
     range_1, range_2 = 30, 60
-    draw_two_tangent_lines(x[range_1:range_2], y[range_1:range_2])
-    between_angle(x[range_1:range_2], y[range_1:range_2])
+    draw_two_tangent_lines(x[::10], y[::10])
+    between_angle(x[::10], y[::10])
     plt.show()
 
