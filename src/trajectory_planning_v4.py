@@ -138,6 +138,10 @@ class Candidate:
 
     def delete_c(self, c):
         self.candidate.remove(c)
+    def draw_candidates(self):
+        for i in self.candidate:
+            i.print_map()
+
 
 
 # 가장 많은 점을 커버하는
@@ -205,6 +209,7 @@ if __name__ == "__main__":
 
     # 후보 생성 및 그리디 알고리즘 적용
     C = Candidate([min(x), max(x), min(y), max(y)], wall, input_wall)
+    # C.draw_candidates()
     print('Candidates generated')
     steps = greedy_cover(wall, C)
 

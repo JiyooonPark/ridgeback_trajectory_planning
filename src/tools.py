@@ -68,7 +68,6 @@ def generate_denser_wall(wall, count):
     for i in range(len(wall)):
         dense_wall.extend(numpy.linspace(wall[i], wall[i + 1], count))
 
-
 import math
 import matplotlib.pyplot as plt
 def point_in_circumference(r,n=6):

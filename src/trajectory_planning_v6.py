@@ -1,6 +1,7 @@
 import numpy as np
 import time
 from tools import *
+from plot_input_der import *
 
 
 class Iidgeback:
@@ -15,7 +16,7 @@ class Iidgeback:
 
     # 벽과 거리를 두기 위한 함수
     def in_limit(self, i, j):
-        return ((i - self.r_center[0]) ** 2 + (j - self.r_center[1]) ** 2 - (self.r_radius + 0.3) ** 2) <= 0
+        return (i - self.r_center[0]) ** 2 + (j - self.r_center[1]) ** 2 <= (self.r_radius + 0.25) ** 2
 
     def can_be_generated(self, wall):
         for (i, j) in wall.uncovered + wall.covered:
@@ -128,8 +129,10 @@ class Candidate:
         for i in range(len(x_interval)):
             for j in np.arange(y_interval[int(i)] + limit, y_interval[int(i)] + 1, 0.05):
                 generated_circle = Iidgeback(id, round(x_interval[i], 2), round(j, 2))
+
                 if generated_circle.can_be_generated(wall):
                     IR.append(generated_circle)
+                    generated_circle.print_map()
                 else:
                     continue
                 id += 1
@@ -213,10 +216,10 @@ if __name__ == "__main__":
 
     # 후보 생성 및 그리디 알고리즘 적용
     C = Candidate([min(x), max(x), min(y), max(y)], wall, input_wall)
-    print('Candidates generated')
-    steps = greedy_cover(wall, C)
-
-    to_gazebo_cmd_format(steps)
+    # print('Candidates generated')
+    # steps = greedy_cover(wall, C)
+    #
+    # to_gazebo_cmd_format(steps)
 
     # 그리는 부분
     plt.plot(x, y, color="grey")
