@@ -1,7 +1,6 @@
 import numpy as np
 import time
 from tools import *
-from plot_input_der import *
 
 
 class Iidgeback:
@@ -10,13 +9,13 @@ class Iidgeback:
         self.r_center = [rx, ry]
         self.i_center = [rx, ry]
         self.r_radius = radius
-        self.i_radius = 0.7
+        self.i_radius = 0.8
         self.cover_wall_amount = 0
         self.cover_point = []
 
     # 벽과 거리를 두기 위한 함수
     def in_limit(self, i, j):
-        return (i - self.r_center[0]) ** 2 + (j - self.r_center[1]) ** 2 <= (self.r_radius + 0.25) ** 2
+        return ((i - self.r_center[0]) ** 2 + (j - self.r_center[1]) ** 2 - (self.r_radius + 0.3) ** 2) <= 0
 
     def can_be_generated(self, wall):
         for (i, j) in wall.uncovered + wall.covered:
@@ -52,12 +51,14 @@ class Iidgeback:
     def cover_amount_angle(self, wall):
         max_cover = [self.r_center[0], self.r_center[1]]
         max_count = 0
-        for circle in point_in_circumference(self.r_radius):
+        angle_list = []
+        for angle, circle in enumerate(point_in_circumference(self.r_radius - 0.2)):
             self.i_center = [circle[0] + self.r_center[0], circle[1] + self.r_center[1]]
             m = self.cover_amount(wall)
             if m > max_count:
                 max_cover = [circle[0] + self.r_center[0], circle[1] + self.r_center[1]]
                 max_count = m
+                angle_list.append(angle)
         self.i_center = max_cover
         return self.cover_amount(wall)
 
@@ -119,7 +120,6 @@ class Candidate:
         self.input_wall = input_wall
 
     def generate_c(self, plate):
-        start = time.time()
         IR = []
         id = 0
         limit = 0.2
@@ -129,27 +129,19 @@ class Candidate:
         for i in range(len(x_interval)):
             for j in np.arange(y_interval[int(i)] + limit, y_interval[int(i)] + 1, 0.05):
                 generated_circle = Iidgeback(id, round(x_interval[i], 2), round(j, 2))
-
                 if generated_circle.can_be_generated(wall):
                     IR.append(generated_circle)
-                    generated_circle.print_map()
                 else:
                     continue
                 id += 1
-        print('points generated. Time:', time.time() - start, len(IR))
         return IR
 
     def delete_c(self, c):
         self.candidate.remove(c)
 
-    def draw_candidates(self):
-        for i in self.IR:
-            i.print_map()
-
 
 # 가장 많은 점을 커버하는
 def max_coverage(wall, C):
-    print(f'Length od C: {len(C)}')
     selected = C[0]
     for c in C:
         m = selected.cover_amount_angle(wall)
@@ -157,7 +149,6 @@ def max_coverage(wall, C):
             selected = c
         else:
             continue
-    print("max_coverage id:", selected.id, 'covers:', m)
     selected.plot_direction()
     if m == 0:
         return None
@@ -171,9 +162,7 @@ def greedy_cover(wall, C):
     while not wall.allcovered():
         max_circle = max_coverage(wall, C.candidate)
         if max_circle == None:
-            print('max_circle is none')
             break
-        print('max_circle exists')
         # plot circle
         plt.scatter(max_circle.r_center[0], max_circle.r_center[1], s=1)
         max_circle.print_map()
@@ -187,18 +176,6 @@ def greedy_cover(wall, C):
     print("path generated with", len(steps), "circles")
 
     return steps
-
-
-def generate_interval(wall, count):
-    interval_wall = []
-    for i in range(len(wall) - 1):
-        interval_wall.extend(numpy.linspace(wall[i], wall[i + 1], count))
-    return interval_wall
-
-
-def setting(circle):
-    print('c:', circle.r_center)
-    return circle.r_center[0]
 
 
 if __name__ == "__main__":
@@ -216,10 +193,10 @@ if __name__ == "__main__":
 
     # 후보 생성 및 그리디 알고리즘 적용
     C = Candidate([min(x), max(x), min(y), max(y)], wall, input_wall)
-    # print('Candidates generated')
-    # steps = greedy_cover(wall, C)
-    #
-    # to_gazebo_cmd_format(steps)
+    print('Candidates generated')
+    steps = greedy_cover(wall, C)
+
+    to_gazebo_cmd_format(steps)
 
     # 그리는 부분
     plt.plot(x, y, color="grey")

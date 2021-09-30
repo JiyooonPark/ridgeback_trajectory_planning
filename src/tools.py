@@ -22,9 +22,9 @@ def plot_wall(wall):
     z_wall = []
 
     for [x, y, z] in wall:
-        x_wall.append(x)
-        y_wall.append(y)
-        z_wall.append(z)
+        x_wall.append(round(x, 3))
+        y_wall.append(round(y, 3))
+        z_wall.append(round(z, 3))
 
     if x_wall[0] == 0:
         return y_wall, z_wall
@@ -35,7 +35,7 @@ def plot_wall(wall):
     else:
         print('no axis with zero value')
     # plt.show()
-    print(x_wall)
+    # print(x_wall)
     return x_wall, y_wall
 
 
@@ -60,7 +60,6 @@ def generate_interval(wall, count):
     interval_wall = []
     for i in range(len(wall) - 1):
         interval_wall.extend(numpy.linspace(wall[i], wall[i + 1], count))
-    print(interval_wall)
     return interval_wall
 
 def generate_denser_wall(wall, count):
@@ -68,14 +67,13 @@ def generate_denser_wall(wall, count):
     for i in range(len(wall)):
         dense_wall.extend(numpy.linspace(wall[i], wall[i + 1], count))
 
+
 import math
 import matplotlib.pyplot as plt
 def point_in_circumference(r,n=6):
     pi = math.pi
-    return [(round(math.cos(pi/n*x)*r, 2),round(-math.sin(pi/n*x)*r, 2)) for x in range(0,n+1)]
-
+    return [(round(math.cos(pi/n*x)*r, 3),round(-math.sin(pi/n*x)*r, 3)) for x in range(0,n+1)]
 if __name__=='__main__':
-
     res = point_in_circumference(10)
     print(res)
     x_list, y_list = [], []
