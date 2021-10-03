@@ -55,7 +55,7 @@ class Iidgeback:
         for angle, circle in enumerate(point_in_circumference(self.r_radius - 0.2)):
             self.i_center = [circle[0] + self.r_center[0], circle[1] + self.r_center[1]]
             m = self.cover_amount(wall)
-            if m > max_count:
+            if m >= max_count:
                 max_cover = [circle[0] + self.r_center[0], circle[1] + self.r_center[1]]
                 max_count = m
                 angle_list.append(angle)
@@ -128,7 +128,7 @@ class Candidate:
         y_interval = generate_interval(self.wall.ypoints, count)
         for i in range(len(x_interval)):
             for j in np.arange(y_interval[int(i)] + limit, y_interval[int(i)] + 1, 0.05):
-                generated_circle = Iidgeback(id, round(x_interval[i], 2), round(j, 2))
+                generated_circle = Iidgeback(id, round(x_interval[i], 3), round(j, 3))
                 if generated_circle.can_be_generated(wall):
                     IR.append(generated_circle)
                 else:
@@ -183,8 +183,9 @@ if __name__ == "__main__":
     input_wall = open_file(file_name, 'obj')
     print(f'Opened file {file_name}')
     x_wall, y_wall = plot_wall(input_wall)
-    x = generate_interval(x_wall, 3)
-    y = generate_interval(y_wall, 3)
+    x, y = x_wall, y_wall
+    # x = generate_interval(x_wall, 3)
+    # y = generate_interval(y_wall, 3)
     wall = Wall(x, y)
 
     # 그리기 관련 부분

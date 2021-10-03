@@ -1,6 +1,6 @@
 import numpy as np
-import time
 from tools import *
+from to_trajectory import *
 
 class Iidgeback:
     def __init__(self, id, rx, ry, wall, radius=0.622):
@@ -138,7 +138,8 @@ def generate_path(init_circle, wall):
         wall.add_covered(max_circle)
         steps.append(max_circle)
     print("path generated with", len(steps), "circles")
-
+    # for s in steps:
+    #     s.i_center = [s.i_center[0], s.i_center[1]+2]
     for s in steps:
         plt.scatter(s.i_center[0], s.i_center[1], s=1)
         s.print_map()
@@ -146,26 +147,29 @@ def generate_path(init_circle, wall):
 
 
 if __name__ == "__main__":
-    file_name = 'smooth_curve'
-    input_wall = open_file(file_name, 'txt')
+    file_name = 'wood_bee_hive_line'
+    input_wall = open_file(file_name, 'obj')
     print(f'Opened file {file_name}')
     x_wall, y_wall = plot_wall(input_wall)
-    wall = Wall(x_wall, y_wall)
+    y_wall_abs = [abs(x) for x in y_wall]
+    wall = Wall(x_wall, y_wall_abs)
 
     # 그리기 관련 부분
     fig = plt.figure(figsize=(8, 3))
     axes = plt.gca()
 
     # 후보 생성 및 그리디 알고리즘 적용
-    init_circle = Iidgeback(-1, x_wall[0], y_wall[0], wall)
-
+    init_circle = Iidgeback(-1, x_wall[0], y_wall_abs[0], wall)
+    #
     print(init_circle.cover_point)
     steps = generate_path(init_circle, wall)
-
-    # to_gazebo_cmd_format(steps)
-
+    #
+    to_gazebo_cmd_format(steps)
+    trajectory = []
+    for i in range(0, len(steps) - 1):
+        trajectory.extend(find_closest(steps[i].i_center, steps[i + 1].i_center, wall.xpoints, wall.ypoints))
     # 그리는 부분
-    plt.plot(x_wall, y_wall, color="grey")
+    plt.plot(x_wall, y_wall_abs, color="grey")
     plt.grid(True)
     plt.gca().set_aspect('equal', adjustable='box')
     plt.show()
