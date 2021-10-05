@@ -5,7 +5,7 @@ def open_file(filename, fileext):
     wall = []
     with open('../input/'+filename+'.'+fileext) as f:
         for line in f:
-            if line[0]!='v':
+            if line[0:2]!='v ':
                 continue
             for word in line.split():
                 if word =='v':
@@ -28,21 +28,25 @@ def plot_wall(wall, size=0.4):
         y_wall.append(y)
         z_wall.append(z)
     plt.figure(figsize=(20, 3))
-    if x_wall[0] == 0:
+    if round(x_wall[0], 2) == 0:
         plt.scatter(y_wall, z_wall, c='indigo', s=size, marker=marker_shape)
         print('zero: x')
         return y_wall, z_wall
-    elif y_wall[0] == 0:
+    elif round(y_wall[0], 2) == 0:
         plt.scatter(x_wall, z_wall, c='indigo', s=size, marker=marker_shape)
         print('zero: y')
         return x_wall, z_wall
-    elif z_wall[0] == 0:
+    elif round(z_wall[0], 2) == 0:
         plt.scatter(x_wall, y_wall, c='indigo', s=size, marker=marker_shape)
         print('zero: z')
         return x_wall, y_wall
-
+    print('done')
 if __name__=='__main__':
-    filename = "smooth_curve"
-    fileext='txt'
+    # filename = "wood_bee_hive_line"
+    filename = "curved_wall_purple_line"
+    fileext='obj'
     wall = open_file(filename, fileext)
+    print(wall)
     plot_wall(wall)
+    plt.show()
+    print('done')

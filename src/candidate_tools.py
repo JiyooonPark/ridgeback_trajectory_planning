@@ -37,12 +37,12 @@ if __name__=='__main__':
     wall = open_file(filename, fileext)
     x, y = plot_wall(wall, 100)
 
-    range_1, range_2 = 30, 60
-    # draw_two_tangent_lines(x[::10], y[::10])
-    # between_angle(x[::10], y[::10])
+    range_1, range_2 = 30, 70
+    draw_two_tangent_lines(x[range_1:range_2], y[range_1:range_2])
+    between_angle(x[range_1:range_2], y[range_1:range_2])
 
-    for i in range(len(x)//5):
-        if between_angle(x[i:i*5-1], y[i:i*5-1])<=90:
-            draw_two_tangent_lines(x[i:i * 5 - 1], y[i:i * 5 - 1])
+    # for i in range(len(x)//5):
+    #     if between_angle(x[i:i*5-1], y[i:i*5-1])<=90:
+    #         draw_two_tangent_lines(x[i:i * 5 - 1], y[i:i * 5 - 1])
     plt.show()
 

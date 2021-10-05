@@ -35,7 +35,7 @@ If you have any suggestions, your help will be greatly appreciated :smile:
 I warned you that it still need more work... but if you are willing to wait...:turtle:
 ```commandline
 1. Place your .obj file in /input
-2. Open trajectory_planning_v3.py
+2. Open trajectory_planning_v6.py
 3. Change the file_name to your file 
 4. Hit run and WAIT
 5. Look at terminal for progress, result
@@ -76,5 +76,18 @@ Realized that I have not considered the actual robots -> fixed the problem but n
 ![2021.09.11](/img/0911-1421.png)
 ![2021.09.11](/img/0911-1453.png)
 ![2021.09.11](/img/0911-1508.png)
+
+**2021.09.26**
+
+Started considering iiwa and wall collision
+![2021.09.26](/img/0926-0044.png)
+
+**2021.09.30**
+
+Due to the deadline moving up, needed a trajectory that ensures least movements. 
+
+Trajectory that puts ridgeback side to side (v8). 
+![2021.09.30](/img/0930-1103.png)
+
 
 </details>

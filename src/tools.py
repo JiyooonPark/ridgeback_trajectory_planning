@@ -40,8 +40,8 @@ def plot_wall(wall):
 
 
 def setting(circle):
-    print('c:', circle.r_center)
-    return circle.r_center[0]
+    # print('c:', circle.i_center)
+    return circle.i_center[0]
 
 # when the final trajectory is given as output,
 # outputs the gazebo executable list or ridgeback positions
@@ -49,10 +49,22 @@ def to_gazebo_cmd_format(steps):
     sorted_path = sorted(steps, key=setting)
     print('X:')
     for s in sorted_path:
-        print(s.r_center[0], end=', ')
+        print(s.i_center[0], end=', ')
     print('\nY:')
     for s in sorted_path:
-        print(s.r_center[1], end=', ')
+        print(s.i_center[1], end=', ')
+def to_gazebo_cmd_format_list(steps):
+    x_step = []
+    y_step = []
+    print('X:')
+    for s in steps:
+        print(s[0], end=', ')
+        x_step.append(s[0])
+    print('\nY:')
+    for s in steps:
+        print(s[1], end=', ')
+        y_step.append(s[1])
+    return x_step, y_step
 
 # when generating candidates, generates intervals btw dots
 import numpy
