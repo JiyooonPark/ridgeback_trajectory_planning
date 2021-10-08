@@ -2,6 +2,7 @@ import numpy as np
 import time
 from tools import *
 
+i = 0
 
 class Iidgeback:
     def __init__(self, id, rx, ry, radius=0.622):
@@ -31,9 +32,9 @@ class Iidgeback:
                 (i - self.r_center[0]) ** 2 + (j - self.r_center[1]) ** 2 - self.r_radius ** 2) > 0
 
     # 원을 plot하는 함수
-    def print_map(self):
-        i_circle = plt.Circle((self.i_center[0], self.i_center[1]), self.i_radius, fill=None, alpha=1, color='orange')
-        r_circle = plt.Circle((self.r_center[0], self.r_center[1]), self.r_radius, fill=None, alpha=1)
+    def print_map(self, iiwa_color='orange', ridgeback_color='black'):
+        i_circle = plt.Circle((self.i_center[0], self.i_center[1]), self.i_radius, fill=None, alpha=1, color=iiwa_color)
+        r_circle = plt.Circle((self.r_center[0], self.r_center[1]), self.r_radius, fill=None, alpha=1, color=ridgeback_color)
         plt.gca().add_patch(i_circle)
         plt.gca().add_patch(r_circle)
 
@@ -57,6 +58,7 @@ class Iidgeback:
             if m > max_count:
                 max_cover = [circle[0] + self.r_center[0], circle[1] + self.r_center[1]]
                 max_count = m
+
         self.i_center = max_cover
         return self.cover_amount(wall)
 
@@ -97,6 +99,7 @@ class Wall:
         plt.scatter(cx, cy, marker="|")
         print()
         print('length covered:', len(self.covered), '/', len(self.uncovered) + len(self.covered))
+        return cx, cy
 
     # 모든 점이 커버되었는지 확인
     def allcovered(self):
@@ -126,33 +129,50 @@ class Candidate:
         x_interval = generate_interval(self.wall.xpoints, count)
         y_interval = generate_interval(self.wall.ypoints, count)
         for i in range(len(x_interval)):
-            for j in np.arange(y_interval[int(i)] + limit, y_interval[int(i)] + 2, 0.05):
-                generated_circle = Iidgeback(id, round(x_interval[i], 2), round(j, 2))
+            for j in np.arange(y_interval[int(i)] + limit, y_interval[int(i)] + 1, 0.05):
+                generated_circle = Iidgeback(id, round(x_interval[i], 3), round(j, 3))
                 if generated_circle.can_be_generated(wall):
                     IR.append(generated_circle)
                 else:
                     continue
                 id += 1
         print('points generated. Time:', time.time() - start, len(IR))
+
         return IR
 
     def delete_c(self, c):
         self.candidate.remove(c)
+    def draw_candidates(self):
+        for i in self.candidate:
+            i.print_map()
+
 
 
 # 가장 많은 점을 커버하는
 def max_coverage(wall, C):
-    print(f'Length od C: {len(C)}')
     selected = C[0]
+    max_covered_points = 0
+    candidates = []
+    final_candidates  = []
     for c in C:
-        m = selected.cover_amount_angle(wall)
-        if c.cover_amount_angle(wall) > m:
+        covered_points = c.cover_amount_angle(wall)
+        if  covered_points >= max_covered_points:
             selected = c
+            max_covered_points = covered_points
+            candidates.append(c)
         else:
             continue
-    print("max_coverage id:", selected.id, 'covers:', m)
+    for c in candidates:
+        covered_points = c.cover_amount_angle(wall)
+        if covered_points == max_covered_points:
+            final_candidates.append(c)
+        else:
+            continue
+    selected = final_candidates[len(final_candidates)//3]
+    print("++++++++++++++++++++++", len(final_candidates))
+    print("max_coverage id:", selected.id, 'covers:', max_covered_points)
     selected.plot_direction()
-    if m == 0:
+    if max_covered_points == 0:
         return None
     return selected
 
@@ -161,19 +181,25 @@ def max_coverage(wall, C):
 def greedy_cover(wall, C):
     print('in greedy')
     steps = []
+    CX = []
+    CY = []
     while not wall.allcovered():
         max_circle = max_coverage(wall, C.candidate)
-        if max_circle == None:
-            print('max_circle is none')
-            break
-        print('max_circle exists')
-        # plot circle
-        plt.scatter(max_circle.r_center[0], max_circle.r_center[1], s=1)
+        # plt.scatter(max_circle.r_center[0], max_circle.r_center[1], s=1)
         max_circle.print_map()
 
-        wall.add_covered(max_circle)
+        cx, cy = wall.add_covered(max_circle)
+        CX.append(cx)
+        CY.append(cy)
         C.delete_c(max_circle)
         steps.append(max_circle)
+        plot_steps_one(wall)
+        for s in steps:
+            s.print_map()
+            s.plot_direction()
+        for (x,y) in zip(CX, CY):
+            plt.scatter(x, y, marker="|")
+        plot_steps_two(wall)
     print('wall all covered')
     for s in steps:
         print(s.r_center, end="")
@@ -186,13 +212,37 @@ def generate_interval(wall, count):
     interval_wall = []
     for i in range(len(wall) - 1):
         interval_wall.extend(numpy.linspace(wall[i], wall[i + 1], count))
-    return interval_wall
+    rounded_wall = [round(x, 3) for x in interval_wall]
+    return rounded_wall
 
 
 def setting(circle):
     print('c:', circle.r_center)
     return circle.r_center[0]
 
+def plot_steps_one(wall):
+    x = wall.xpoints
+    y = wall.ypoints
+    # 그리기 관련 부분
+    fig = plt.figure()
+    fig.set_figheight(3)
+    fig.set_figwidth(8)
+    axes = plt.gca()
+    # 그리는 부분
+    # axes.text(-2.5, -3.3, __file__.split('/')[-1], fontsize=12)
+    axes.plot(x, y, color="grey")
+    fig_x = [-2, 12]
+    fig_y = [-3, -6]
+    axes.scatter(fig_x, fig_y, alpha=0)
+
+def plot_steps_two(wall):
+    global i
+
+    plt.grid(True)
+    plt.gca().set_aspect('equal', adjustable='box')
+    plt.savefig(str(i)+'.png', dpi=300)
+    i+=1
+    plt.show()
 
 if __name__ == "__main__":
     file_name = 'smooth_curve'
@@ -202,6 +252,8 @@ if __name__ == "__main__":
     x = generate_interval(x_wall, 3)
     y = generate_interval(y_wall, 3)
     wall = Wall(x, y)
+    plot_steps_one(wall)
+    plot_steps_two(wall)
 
     # 그리기 관련 부분
     fig = plt.figure(figsize=(8, 3))
@@ -209,13 +261,14 @@ if __name__ == "__main__":
 
     # 후보 생성 및 그리디 알고리즘 적용
     C = Candidate([min(x), max(x), min(y), max(y)], wall, input_wall)
+    # C.draw_candidates()
     print('Candidates generated')
     steps = greedy_cover(wall, C)
 
     to_gazebo_cmd_format(steps)
 
     # 그리는 부분
-    plt.text(-2.5, -3.3, __file__.split('/')[-1], fontsize=12)
+    # plt.text(-5, -1, __file__.split('/')[-1], fontsize=12)
     plt.plot(x, y, color="grey")
     plt.grid(True)
     plt.gca().set_aspect('equal', adjustable='box')

@@ -2,16 +2,16 @@ import numpy as np
 import time
 from tools import *
 
+
 class Iidgeback:
-    def __init__(self, id, rx, ry,wall, radius=0.622):
+    def __init__(self, id, rx, ry, radius=0.622):
         self.id = id
         self.r_center = [rx, ry]
-        self.i_center = [rx, ry+0.3]
+        self.i_center = [rx, ry]
         self.r_radius = radius
-        self.i_radius = 0.8
+        self.i_radius = 0.7
         self.cover_wall_amount = 0
         self.cover_point = []
-        self.calc_cover_points(wall)
 
     # 벽과 거리를 두기 위한 함수
     def in_limit(self, i, j):
@@ -37,7 +37,6 @@ class Iidgeback:
         plt.gca().add_patch(i_circle)
         plt.gca().add_patch(r_circle)
 
-
     # 벽을 얼마나 커버하는지 반환하는 함수
     def cover_amount(self, wall):
         count = 0
@@ -52,14 +51,13 @@ class Iidgeback:
     def cover_amount_angle(self, wall):
         max_cover = [self.r_center[0], self.r_center[1]]
         max_count = 0
-        angle_list = []
-        for angle, circle in enumerate(point_in_circumference(self.r_radius - 0.2)):
+        for circle in point_in_circumference(self.r_radius):
             self.i_center = [circle[0] + self.r_center[0], circle[1] + self.r_center[1]]
             m = self.cover_amount(wall)
             if m > max_count:
                 max_cover = [circle[0] + self.r_center[0], circle[1] + self.r_center[1]]
                 max_count = m
-                angle_list.append(angle)
+
         self.i_center = max_cover
         return self.cover_amount(wall)
 
@@ -75,12 +73,6 @@ class Iidgeback:
     def plot_direction(self):
         plt.plot([self.r_center[0], self.i_center[0]], [self.r_center[1], self.i_center[1]], 'm-')
 
-
-    def check_include_point(self, point):
-        if point in self.cover_point:
-            return True
-        else:
-            return False
 
 # 벽 class
 class Wall:
@@ -118,51 +110,101 @@ class Wall:
     def print_map(self):
         plt.plot(self.xpoints, self.ypoints)
 
-def generate_candidates(point_to_be_included, wall):
-    IR = []
-    id = 0
-    limit = 0.2
-    count = 10
-    x_interval = generate_interval(wall.xpoints, count)
-    y_interval = generate_interval(wall.ypoints, count)
 
-    for i in range(len(x_interval)):
-        for j in np.arange(y_interval[int(i)] + limit, y_interval[int(i)] + 1, 1):
-            generated_circle = Iidgeback(id, round(x_interval[i], 3), round(j, 3), wall)
-            if generated_circle.check_include_point(point_to_be_included):
-                IR.append(generated_circle)
-                # plt.scatter(generated_circle.i_center[0], generated_circle.i_center[1], s=1)
-                # generated_circle.print_map()
-            else:
-                continue
-            id += 1
+# 초기에 원 후보를 생성
+class Candidate:
+    def __init__(self, plate, wall, input_wall):
+        self.wall = wall
+        self.candidate = self.generate_c(plate)
+        self.input_wall = input_wall
 
-    return IR[-1]
+    def generate_c(self, plate):
+        start = time.time()
+        IR = []
+        id = 0
+        limit = 0.2
+        count = 10
+        x_interval = generate_interval(self.wall.xpoints, count)
+        y_interval = generate_interval(self.wall.ypoints, count)
+        for i in range(len(x_interval)):
+            for j in np.arange(y_interval[int(i)] + limit, y_interval[int(i)] + 1, 0.05):
+                generated_circle = Iidgeback(id, round(x_interval[i], 3), round(j, 3))
+                if generated_circle.can_be_generated(wall):
+                    IR.append(generated_circle)
+                else:
+                    continue
+                id += 1
+        print('points generated. Time:', time.time() - start, len(IR))
+        return IR
 
-def generate_path(init_circle, wall):
-    steps = [init_circle]
-    wall.add_covered(init_circle)
-    point_to_be_included = init_circle.cover_point[-1]
-    prev_max_id = init_circle.id
+    def delete_c(self, c):
+        self.candidate.remove(c)
+    def draw_candidates(self):
+        for i in self.candidate:
+            i.print_map()
+
+
+
+# 가장 많은 점을 커버하는
+def max_coverage(wall, C):
+    selected = C[0]
+    max_covered_points = 0
+    candidates = []
+    final_candidates  = []
+    for c in C:
+        covered_points = c.cover_amount_angle(wall)
+        if  covered_points >= max_covered_points:
+            selected = c
+            max_covered_points = covered_points
+            candidates.append(c)
+        else:
+            continue
+    for c in candidates:
+        covered_points = c.cover_amount_angle(wall)
+        if covered_points == max_covered_points:
+            final_candidates.append(c)
+        else:
+            continue
+    selected = final_candidates[len(final_candidates)//3]
+    print("++++++++++++++++++++++", len(final_candidates))
+    print("max_coverage id:", selected.id, 'covers:', max_covered_points)
+    selected.plot_direction()
+    if max_covered_points == 0:
+        return None
+    return selected
+
+
+# 실제로 다음 원을 선택하는 그리디 알고리즘
+def greedy_cover(wall, C):
+    print('in greedy')
+    steps = []
     while not wall.allcovered():
-        max_circle = generate_candidates(point_to_be_included, wall)
-        if max_circle == None:
-            break
-        # plot circle
-        if prev_max_id == max_circle.id:
-            break
-        prev_max_id = max_circle.id
-        # print(max_circle.id)
+        max_circle = max_coverage(wall, C.candidate)
+        plt.scatter(max_circle.r_center[0], max_circle.r_center[1], s=1)
+        max_circle.print_map()
 
-        point_to_be_included = max_circle.cover_point[-1]
         wall.add_covered(max_circle)
+        C.delete_c(max_circle)
         steps.append(max_circle)
+    print('wall all covered')
+    for s in steps:
+        print(s.r_center, end="")
     print("path generated with", len(steps), "circles")
 
-    for s in steps:
-        plt.scatter(s.i_center[0], s.i_center[1], s=1)
-        s.print_map()
     return steps
+
+
+def generate_interval(wall, count):
+    interval_wall = []
+    for i in range(len(wall) - 1):
+        interval_wall.extend(numpy.linspace(wall[i], wall[i + 1], count))
+    rounded_wall = [round(x, 3) for x in interval_wall]
+    return rounded_wall
+
+
+def setting(circle):
+    print('c:', circle.r_center)
+    return circle.r_center[0]
 
 
 if __name__ == "__main__":
@@ -170,22 +212,25 @@ if __name__ == "__main__":
     input_wall = open_file(file_name, 'txt')
     print(f'Opened file {file_name}')
     x_wall, y_wall = plot_wall(input_wall)
-    wall = Wall(x_wall, y_wall)
+    x = generate_interval(x_wall, 3)
+    y = generate_interval(y_wall, 3)
+    wall = Wall(x, y)
 
     # 그리기 관련 부분
     fig = plt.figure(figsize=(8, 3))
     axes = plt.gca()
 
     # 후보 생성 및 그리디 알고리즘 적용
-    init_circle = Iidgeback(-1, x_wall[0], y_wall[0], wall)
+    C = Candidate([min(x), max(x), min(y), max(y)], wall, input_wall)
+    # C.draw_candidates()
+    print('Candidates generated')
+    steps = greedy_cover(wall, C)
 
-    print(init_circle.cover_point)
-    steps = generate_path(init_circle, wall)
-
-    # to_gazebo_cmd_format(steps)
+    to_gazebo_cmd_format(steps)
 
     # 그리는 부분
-    plt.plot(x_wall, y_wall, color="grey")
+    plt.text(-2.5, -3.3, __file__.split('/')[-1], fontsize=12)
+    plt.plot(x, y, color="grey")
     plt.grid(True)
     plt.gca().set_aspect('equal', adjustable='box')
     plt.show()

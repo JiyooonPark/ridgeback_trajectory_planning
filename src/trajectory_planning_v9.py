@@ -9,7 +9,7 @@ class Iidgeback:
         self.r_center = [rx, ry]
         self.i_center = [rx, ry]
         self.r_radius = radius
-        self.i_radius = 0.8
+        self.i_radius = 0.7
         self.cover_wall_amount = 0
         self.cover_point = []
 
@@ -123,7 +123,7 @@ class Candidate:
         IR = []
         id = 0
         limit = 0.2
-        count = 1
+        count = 10
         x_interval = generate_interval(self.wall.xpoints, count)
         y_interval = generate_interval(self.wall.ypoints, count)
         for i in range(len(x_interval)):
@@ -179,8 +179,8 @@ def greedy_cover(wall, C):
 
 
 if __name__ == "__main__":
-    file_name = 'wood_bee_hive_line'
-    input_wall = open_file(file_name, 'obj')
+    file_name = 'smooth_curve'
+    input_wall = open_file(file_name, 'txt')
     print(f'Opened file {file_name}')
     x_wall, y_wall = plot_wall(input_wall)
     x, y = x_wall, y_wall
@@ -200,6 +200,7 @@ if __name__ == "__main__":
     to_gazebo_cmd_format(steps)
 
     # 그리는 부분
+    plt.text(-2.5, -3.3, __file__.split('/')[-1], fontsize=12)
     plt.plot(x, y, color="grey")
     plt.grid(True)
     plt.gca().set_aspect('equal', adjustable='box')

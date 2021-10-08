@@ -2,6 +2,8 @@ import numpy as np
 from tools import *
 from to_trajectory import *
 
+# side by side working
+
 class Iidgeback:
     def __init__(self, id, rx, ry, wall, radius=0.622):
         self.id = id
@@ -147,8 +149,8 @@ def generate_path(init_circle, wall):
 
 
 if __name__ == "__main__":
-    file_name = 'wood_bee_hive_line'
-    input_wall = open_file(file_name, 'obj')
+    file_name = 'smooth_curve'
+    input_wall = open_file(file_name, 'txt')
     print(f'Opened file {file_name}')
     x_wall, y_wall = plot_wall(input_wall)
     y_wall_abs = [abs(x) for x in y_wall]
@@ -169,6 +171,7 @@ if __name__ == "__main__":
     for i in range(0, len(steps) - 1):
         trajectory.extend(find_closest(steps[i].i_center, steps[i + 1].i_center, wall.xpoints, wall.ypoints))
     # 그리는 부분
+    plt.text(-2.5, 6.7, __file__.split('/')[-1], fontsize=12)
     plt.plot(x_wall, y_wall_abs, color="grey")
     plt.grid(True)
     plt.gca().set_aspect('equal', adjustable='box')

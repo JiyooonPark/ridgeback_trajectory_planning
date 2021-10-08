@@ -216,6 +216,7 @@ if __name__ == "__main__":
     to_gazebo_cmd_format(steps)
 
     # 그리는 부분
+    plt.text(-2.5, -3.3, __file__.split('/')[-1], fontsize=12)
     plt.plot(x, y, color="grey")
     plt.grid(True)
     plt.gca().set_aspect('equal', adjustable='box')
