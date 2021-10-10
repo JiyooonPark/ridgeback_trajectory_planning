@@ -52,7 +52,10 @@ def to_gazebo_cmd_format(steps):
         print(s.i_center[0], end=', ')
     print('\nY:')
     for s in sorted_path:
-        print(s.i_center[1], end=', ')
+        print(round(s.i_center[1], 3), end=', ')
+    print('\nangle:')
+    for s in sorted_path:
+        print(s.angle, end=', ')
 def to_gazebo_cmd_format_list(steps):
     x_step = []
     y_step = []
@@ -84,7 +87,7 @@ import math
 import matplotlib.pyplot as plt
 def point_in_circumference(r,n=6):
     pi = math.pi
-    return [(round(math.cos(pi/n*x)*r, 3),round(-math.sin(pi/n*x)*r, 3)) for x in range(0,n+1)]
+    return [(round(-math.cos(pi/n*x)*r, 3),round(math.sin(pi/n*x)*r, 3)) for x in range(0,n+1)]
 if __name__=='__main__':
     res = point_in_circumference(10)
     print(res)
@@ -92,6 +95,10 @@ if __name__=='__main__':
     for x, y in res:
         x_list.append(x)
         y_list.append(y)
+    fig = plt.figure()
+    fig.set_figheight(10)
+    fig.set_figwidth(10)
+    axes = plt.gca()
     plt.scatter(x_list, y_list)
     plt.grid(True)
     plt.gca().set_aspect('equal', adjustable='box')

@@ -51,13 +51,17 @@ class Iidgeback:
     def cover_amount_angle(self, wall):
         max_cover = [self.r_center[0], self.r_center[1]]
         max_count = 0
-        for circle in point_in_circumference(self.r_radius):
+        angle = 0
+        angle_list = [-90, -45, -30, 0, 30, 45, 90]
+        for i, circle in enumerate(point_in_circumference(self.r_radius)):
             self.i_center = [circle[0] + self.r_center[0], circle[1] + self.r_center[1]]
             m = self.cover_amount(wall)
             if m > max_count:
                 max_cover = [circle[0] + self.r_center[0], circle[1] + self.r_center[1]]
                 max_count = m
+                angle = angle_list[i]
 
+        self.angle = angle
         self.i_center = max_cover
         return self.cover_amount(wall)
 
@@ -101,7 +105,7 @@ class Wall:
 
     # 모든 점이 커버되었는지 확인
     def allcovered(self):
-        if len(self.uncovered) == 0:
+        if len(self.uncovered) == 3:
             return True
         else:
             return False
@@ -127,7 +131,7 @@ class Candidate:
         x_interval = generate_interval(self.wall.xpoints, count)
         y_interval = generate_interval(self.wall.ypoints, count)
         for i in range(len(x_interval)):
-            for j in np.arange(y_interval[int(i)] + limit, y_interval[int(i)] + 1, 0.05):
+            for j in np.arange(y_interval[int(i)] -1 , y_interval[int(i)] -limit, 0.05):
                 generated_circle = Iidgeback(id, round(x_interval[i], 3), round(j, 3))
                 if generated_circle.can_be_generated(wall):
                     IR.append(generated_circle)
@@ -180,6 +184,8 @@ def greedy_cover(wall, C):
     steps = []
     while not wall.allcovered():
         max_circle = max_coverage(wall, C.candidate)
+        if max_circle == None:
+            return steps
         plt.scatter(max_circle.r_center[0], max_circle.r_center[1], s=1)
         max_circle.print_map()
 
@@ -212,13 +218,16 @@ if __name__ == "__main__":
     input_wall = open_file(file_name, 'txt')
     print(f'Opened file {file_name}')
     x_wall, y_wall = plot_wall(input_wall)
+    y_wall_abs = [abs(y) for y in y_wall]
+
     x = generate_interval(x_wall, 3)
-    y = generate_interval(y_wall, 3)
+    y = generate_interval(y_wall_abs, 3)
     wall = Wall(x, y)
 
     # 그리기 관련 부분
     fig = plt.figure(figsize=(8, 3))
     axes = plt.gca()
+    # plt.axis('off')
 
     # 후보 생성 및 그리디 알고리즘 적용
     C = Candidate([min(x), max(x), min(y), max(y)], wall, input_wall)
@@ -229,7 +238,7 @@ if __name__ == "__main__":
     to_gazebo_cmd_format(steps)
 
     # 그리는 부분
-    plt.text(-2.5, -3.3, __file__.split('/')[-1], fontsize=12)
+    # plt.text(-2.5, -3.3, __file__.split('/')[-1], fontsize=12)
     plt.plot(x, y, color="grey")
     plt.grid(True)
     plt.gca().set_aspect('equal', adjustable='box')

@@ -129,7 +129,7 @@ class Candidate:
         x_interval = generate_interval(self.wall.xpoints, count)
         y_interval = generate_interval(self.wall.ypoints, count)
         for i in range(len(x_interval)):
-            for j in np.arange(y_interval[int(i)] + limit, y_interval[int(i)] + 1, 0.05):
+            for j in np.arange(y_interval[int(i)] -1 , y_interval[int(i)] -limit, 0.05):
                 generated_circle = Iidgeback(id, round(x_interval[i], 3), round(j, 3))
                 if generated_circle.can_be_generated(wall):
                     IR.append(generated_circle)
@@ -231,8 +231,8 @@ def plot_steps_one(wall):
     # 그리는 부분
     # axes.text(-2.5, -3.3, __file__.split('/')[-1], fontsize=12)
     axes.plot(x, y, color="grey")
-    fig_x = [-2, 12]
-    fig_y = [-3, -6]
+    fig_x = [-2, 11]
+    fig_y = [6.3, 3]
     axes.scatter(fig_x, fig_y, alpha=0)
 
 def plot_steps_two(wall):
@@ -249,8 +249,9 @@ if __name__ == "__main__":
     input_wall = open_file(file_name, 'txt')
     print(f'Opened file {file_name}')
     x_wall, y_wall = plot_wall(input_wall)
+    y_wall_abs = [abs(y) for y in y_wall]
     x = generate_interval(x_wall, 3)
-    y = generate_interval(y_wall, 3)
+    y = generate_interval(y_wall_abs, 3)
     wall = Wall(x, y)
     plot_steps_one(wall)
     plot_steps_two(wall)
