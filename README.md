@@ -3,7 +3,7 @@
 ### Motivation:
 In taking our project to the next level, we wanted to allow our robot to draw on a large curved surface. This repository is for calculating the trajectory for following the curved wall. 
 
-
+<img src="./img/gazebo.GIF" width="600">
 ---
 
 ### Input:
@@ -24,7 +24,7 @@ Y: -4.0, -4.34, -4.4, -4.31, -4.52, -4.04, -3.64, -3.65, -4.69, -4.63, -4.34, -4
 
 
 ### Problems:
-The repository is still going under modifications. Currently, it is SUPER SLOW. So please wait until I am done working on it :smile:
+The repository is still going under constant modifications :smile:
 If you have any suggestions, your help will be greatly appreciated :smile:
 
 
@@ -34,16 +34,17 @@ If you have any suggestions, your help will be greatly appreciated :smile:
 ### How To Use:
 I warned you that it still need more work... but if you are willing to wait...:turtle:
 ```commandline
+
 1. Place your .obj file in /input
-2. Open trajectory_planning_v6.py
+2. Open trajectory_planning_v10.py
 3. Change the file_name to your file 
 4. Hit run and WAIT
 5. Look at terminal for progress, result
+
 ```
 
 
-<details>
-<summary> Progress Stages</summary>
+*** Progress Stages***
 
 **2021.08.09**
 
@@ -89,5 +90,7 @@ Due to the deadline moving up, needed a trajectory that ensures least movements.
 Trajectory that puts ridgeback side to side (v8). 
 ![2021.09.30](/img/0930-1103.png)
 
+**2021.10.09**
 
-</details>
+Updated configurations to match gazebo world + cleaned up algorithm to have better efficiency
+![2021.09.30](/img/1011-2239.png)
