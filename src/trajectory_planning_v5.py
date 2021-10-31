@@ -123,7 +123,6 @@ class Candidate:
         IR = []
         id = 0
         limit = 0.2
-        count = 10
         for i in range(self.include_point[0]- 0.5, self.include_point[0]+0.5):
             for j in np.arange(self.include_point[1] + limit, self.include_point[1] + 1, 0.05):
                 generated_circle = Iidgeback(id, round(i, 2), round(j, 2))
@@ -227,7 +226,7 @@ if __name__ == "__main__":
     axes = plt.gca()
 
     # 후보 생성 및 그리디 알고리즘 적용
-    C = Candidate([min(x), max(x), min(y), max(y)], wall, input_wall)
+    C = Candidate( wall, input_wall)
     print('Candidates generated')
     steps = greedy_cover(wall, C)
 

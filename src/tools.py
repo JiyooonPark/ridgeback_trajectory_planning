@@ -46,16 +46,17 @@ def setting(circle):
 # when the final trajectory is given as output,
 # outputs the gazebo executable list or ridgeback positions
 def to_gazebo_cmd_format(steps):
-    sorted_path = sorted(steps, key=setting)
-    print('X:')
-    for s in sorted_path:
-        print(s.i_center[0], end=', ')
-    print('\nY:')
-    for s in sorted_path:
-        print(round(s.i_center[1], 3), end=', ')
-    print('\nangle:')
-    for s in sorted_path:
-        print(s.angle, end=', ')
+    # sorted_path = sorted(steps, key=setting)
+    # print('X:')
+    # for s in sorted_path:
+    #     print(s.r_center[0], end=', ')
+    # print('\nY:')
+    # for s in sorted_path:
+    #     print(round(s.r_center[1], 3), end=', ')
+    # print('\nangle:')
+    # for s in sorted_path:
+    #     print(s.angle, end=', ')
+    pass
 def to_gazebo_cmd_format_list(steps):
     x_step = []
     y_step = []

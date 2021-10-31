@@ -1,5 +1,3 @@
-import numpy
-
 from plot_input import *
 import numpy as np
 
@@ -17,8 +15,8 @@ def draw_two_tangent_lines(x, y):
     plt.scatter(x[-1], y[-1], c='red', s=100)
 
 def between_angle(x, y):
-    vector_1 = numpy.array([x[0], y[0]]) - numpy.array([x[len(x) // 2], y[len(y) // 2]])
-    vector_2 = numpy.array([x[len(x) // 2],  y[len(y) // 2]]) - np.array([x[-1], y[-1]])
+    vector_1 = np.array([x[0], y[0]]) - np.array([x[len(x) // 2], y[len(y) // 2]])
+    vector_2 = np.array([x[len(x) // 2],  y[len(y) // 2]]) - np.array([x[-1], y[-1]])
 
     unit_vector_1 = vector_1 / np.linalg.norm(vector_1)
     unit_vector_2 = vector_2 / np.linalg.norm(vector_2)

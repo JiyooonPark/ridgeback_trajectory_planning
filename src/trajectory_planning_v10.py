@@ -227,7 +227,6 @@ if __name__ == "__main__":
     # 그리기 관련 부분
     fig = plt.figure(figsize=(8, 3))
     axes = plt.gca()
-    # plt.axis('off')
 
     # 후보 생성 및 그리디 알고리즘 적용
     C = Candidate([min(x), max(x), min(y), max(y)], wall, input_wall)
@@ -238,7 +237,6 @@ if __name__ == "__main__":
     to_gazebo_cmd_format(steps)
 
     # 그리는 부분
-    # plt.text(-2.5, -3.3, __file__.split('/')[-1], fontsize=12)
     plt.plot(x, y, color="grey")
     plt.grid(True)
     plt.gca().set_aspect('equal', adjustable='box')

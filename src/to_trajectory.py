@@ -19,11 +19,8 @@ if __name__=='__main__':
     axes = plt.gca()
     trajectory = []
 
-    x_points = [-0.864, 0.246, 1.624, 2.834, 3.329, 4.322, 5.604, 6.465, 7.417, 8.433, 9.663]
-    y_points = [5.008, 4.909, 4.932, 5.109, 4.803, 4.293, 4.325, 5.331, 5.089, 4.837, 5.493]
-    # y_points_abs = [abs(x)+0.8 for x in y_points]
-    # x_positive = [x+0.4 for x in x_points]
-    # y_positive = [abs(y) - 0.8 for y in y_points]
+    x_points = [-0.553, 0.246, 1.624, 2.834, 2.79, 4.322, 5.604, 6.776, 6.878, 8.433, 9.974]
+    y_points = [4.469, 4.287, 4.31, 4.487, 4.492, 3.671, 3.703, 4.792, 4.778, 4.215, 4.954]
     file_name = 'smooth_curve'
     input_wall = open_file(file_name, 'txt')
 
@@ -39,10 +36,6 @@ if __name__=='__main__':
     x_step, y_step = to_gazebo_cmd_format_list(trajectory)
     # plt.scatter(x_points, y_points_abs, c='pink')
     print()
-    # print(y_positive)
-    # plt.scatter(x_step, y_step)
     plt.plot(wall_x, wall_y_abs)
     plt.show()
     plt.plot(x_step, y_step)
-
-    # print(trajectory)

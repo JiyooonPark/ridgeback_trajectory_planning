@@ -184,8 +184,8 @@ if __name__ == "__main__":
     print(f'Opened file {file_name}')
     x_wall, y_wall = plot_wall(input_wall)
     x, y = x_wall, y_wall
-    # x = generate_interval(x_wall, 3)
-    # y = generate_interval(y_wall, 3)
+    x = generate_interval(x_wall, 3)
+    y = generate_interval(y_wall, 3)
     wall = Wall(x, y)
 
     # 그리기 관련 부분

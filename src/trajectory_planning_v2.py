@@ -188,9 +188,7 @@ if __name__ == "__main__":
     input_wall = open_file(file_name, 'txt')
     print(f'Opened file {file_name}')
     x_wall, y_wall = plot_wall(input_wall)
-    print('?')
     x = generate_interval(x_wall, 3)
-    print('?')
     y = generate_interval(y_wall, 3)
     wall = Wall(x, y)
 
