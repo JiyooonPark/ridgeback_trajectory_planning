@@ -43,7 +43,7 @@ def plot_wall(wall, size=0.4):
     print('done')
 if __name__=='__main__':
     # filename = "wood_bee_hive_line"
-    filename = "curved_wall_purple_line"
+    filename = "smooth_curve2"
     fileext='obj'
     wall = open_file(filename, fileext)
     print(wall)

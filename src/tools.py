@@ -38,6 +38,35 @@ def plot_wall(wall):
     # print(x_wall)
     return x_wall, y_wall
 
+def plot_wall_draw(wall, size=0.4):
+    x_wall = []
+    y_wall = []
+    z_wall = []
+
+    marker_shape="o"
+
+    for [x, y, z] in wall:
+        x_wall.append(x)
+        y_wall.append(y)
+        z_wall.append(z)
+    plt.figure(figsize=(20, 3))
+    if round(x_wall[0], 2) == 0:
+        z_wall = [-z for z in z_wall]
+        plt.scatter(y_wall, z_wall, c='indigo', s=size, marker=marker_shape)
+        print('zero: x')
+        return y_wall, z_wall
+    elif round(y_wall[0], 2) == 0:
+        z_wall = [-z for z in z_wall]
+        plt.scatter(x_wall, z_wall, c='indigo', s=size, marker=marker_shape)
+        print('zero: y')
+        return x_wall, z_wall
+    elif round(z_wall[0], 2) == 0:
+        y_wall = [-y for y in y_wall]
+        plt.scatter(x_wall, y_wall, c='indigo', s=size, marker=marker_shape)
+        print('zero: z')
+        return x_wall, y_wall
+    print('done')
+
 
 def setting(circle):
     # print('c:', circle.i_center)
@@ -46,17 +75,30 @@ def setting(circle):
 # when the final trajectory is given as output,
 # outputs the gazebo executable list or ridgeback positions
 def to_gazebo_cmd_format(steps):
-    # sorted_path = sorted(steps, key=setting)
-    # print('X:')
-    # for s in sorted_path:
-    #     print(s.r_center[0], end=', ')
-    # print('\nY:')
-    # for s in sorted_path:
-    #     print(round(s.r_center[1], 3), end=', ')
-    # print('\nangle:')
+    sorted_path = sorted(steps, key=setting)
+    min_x_list = []
+    max_x_list = []
+    print('X:')
+    for s in sorted_path:
+        min_x_list.append(s.cover_point[0][0])
+        print(s.i_center[0], end=', ')
+        max_x_list.append(s.cover_point[-1][0])
+    print('\nY:')
+    for s in sorted_path:
+        print(round(s.i_center[1], 3), end=', ')
+    print('\nangle:')
     # for s in sorted_path:
     #     print(s.angle, end=', ')
-    pass
+
+    return min_x_list, max_x_list
+
+def to_iiwa_range(min_x_list, max_x_list):
+    to_iiwa=[]
+    for i in range(len(min_x_list)-1):
+        to_iiwa.append((max_x_list[i]+min_x_list[i+1])/2)
+    return to_iiwa
+
+
 def to_gazebo_cmd_format_list(steps):
     x_step = []
     y_step = []
