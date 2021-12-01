@@ -12,7 +12,6 @@ def open_file(filename, fileext):
                 else:
                     point.append(float(word))
             wall.append(point)
-    # print(wall)
     return wall
 
 
@@ -49,7 +48,7 @@ def plot_wall_draw(wall, size=0.4):
         x_wall.append(x)
         y_wall.append(y)
         z_wall.append(z)
-    plt.figure(figsize=(20, 3))
+    # plt.figure(figsize=(20, 3))
     if round(x_wall[0], 2) == 0:
         z_wall = [-z for z in z_wall]
         plt.scatter(y_wall, z_wall, c='indigo', s=size, marker=marker_shape)
@@ -87,8 +86,11 @@ def to_gazebo_cmd_format(steps):
     for s in sorted_path:
         print(round(s.i_center[1], 3), end=', ')
     print('\nangle:')
-    # for s in sorted_path:
-    #     print(s.angle, end=', ')
+    for s in sorted_path:
+        print(math.degrees(s.angle), end=', ')
+    print('\nrad:')
+    for s in sorted_path:
+        print(s.angle, end=', ')
 
     return min_x_list, max_x_list
 
@@ -145,4 +147,4 @@ if __name__=='__main__':
     plt.scatter(x_list, y_list)
     plt.grid(True)
     plt.gca().set_aspect('equal', adjustable='box')
-    plt.show()
+    # plt.show()

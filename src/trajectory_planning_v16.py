@@ -1,6 +1,5 @@
 import time
 
-import matplotlib.pyplot as plt
 import numpy as np
 
 from tools import *
@@ -20,9 +19,9 @@ class Iidgeback:
         self.wall = wall
 
     def set_angle(self):
-        self.cover_point.sort()
-        x1, y1 = self.cover_point[0]
-        x2, y2 = self.cover_point[-1]
+        self.cover_point.sort(key=lambda k:k[0])
+        id, x1, y1 = self.cover_point[0]
+        id, x2, y2 = self.cover_point[-1]
 
         hypot = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
         # print('hypot', hypot, 'x1-x1', x2-x1)
@@ -35,24 +34,26 @@ class Iidgeback:
         return self.angle
 
     def set_ridgeback(self, hypot= 0.8):
-        x1, y1 = self.cover_point[0]
-        x2, y2 = self.cover_point[-1]
+        id, x1, y1 = self.cover_point[0]
+        id, x2, y2 = self.cover_point[-1]
+
         direction = (y2-y1)/(x2-x1)
+
         if direction >= 0:
             self.r_center[0] = self.i_center[0] + hypot*math.cos(self.angle)
             self.r_center[1] = self.i_center[1] - hypot*math.sin(self.angle)
-            if not self.ridgeback_can_go(self.wall):
+            if not self.ridgeback_can_go():
                 self.r_center[0] = self.i_center[0] + hypot * math.cos(self.angle)
-            if not self.ridgeback_can_go(self.wall):
-                self.r_center[1] = self.i_center[1] + hypot*math.sin(self.angle)
+            # if not self.ridgeback_can_go():
+            #     self.r_center[1] = self.i_center[1] + hypot*math.sin(self.angle)
 
         else:
             self.r_center[0] = self.i_center[0] - hypot*math.cos(self.angle)
             self.r_center[1] = self.i_center[1] - hypot*math.sin(self.angle)
-            if not self.ridgeback_can_go(self.wall):
+            if not self.ridgeback_can_go():
                 self.r_center[0] = self.i_center[0] + hypot * math.cos(self.angle)
-            if not self.ridgeback_can_go(self.wall):
-                self.r_center[1] = self.i_center[1] + hypot*math.sin(self.angle)
+            # if not self.ridgeback_can_go():
+            #     self.r_center[1] = self.i_center[1] + hypot*math.sin(self.angle)
 
     # 벽과 거리를 두기 위한 함수
     def in_limit(self, i, j):
@@ -60,14 +61,15 @@ class Iidgeback:
         return False
 
     def can_be_generated(self, wall):
-        for (i, j) in wall.uncovered + wall.covered:
+        for (id, i, j) in wall.uncovered + wall.covered:
             if self.in_limit(i, j):
                 return False
             else:
                 continue
         return True
-    def ridgeback_can_go(self, wall):
-        for (i, j) in self.wall.uncovered + self.wall.covered:
+
+    def ridgeback_can_go(self):
+        for (id, i, j) in self.wall.uncovered + self.wall.covered:
             if ((i - self.r_center[0]) ** 2 + (j - self.r_center[1]) ** 2 - (self.r_radius + 0.1) ** 2) <=0:
                 return False
         return True
@@ -86,7 +88,7 @@ class Iidgeback:
     # 벽을 얼마나 커버하는지 반환하는 함수
     def cover_amount(self, wall):
         count = 0
-        for (x, y) in wall.uncovered:
+        for (id, x, y) in wall.uncovered:
             if self.in_iiwa_range(x, y):
                 count += 1
             else:
@@ -96,9 +98,9 @@ class Iidgeback:
 
     # 원이 벽의 어떤 점을 커버하는지 계산하여 원의 멤버 변수에 저장
     def calc_cover_points(self, wall):
-        for (x, y) in zip(wall.xpoints, wall.ypoints):
+        for (id, x, y) in zip(wall.wall_id, wall.xpoints, wall.ypoints):
             if self.in_iiwa_range(x, y):
-                self.cover_point.append((x, y))
+                self.cover_point.append((id, x, y))
             else:
                 continue
         return self.cover_point
@@ -113,19 +115,21 @@ class Iidgeback:
 class Wall:
     def __init__(self, x, y):
         self.covered = []
-        self.uncovered = list(zip(x, y))
+        self.wall_id = [k for k in range(len(x))]
+        self.uncovered = list(zip(self.wall_id, x, y))
         self.xpoints = x
         self.ypoints = y
+
 
     # 벽에서 커버된 점을 추가함
     def add_covered(self, candidate):
         cx = []
         cy = []
-        for (x, y) in candidate.calc_cover_points(self):
-            if (x, y) in self.uncovered:
+        for (id, x, y) in candidate.calc_cover_points(self):
+            if (id, x, y) in self.uncovered:
                 print('(' + str(x) + ',' + str(y) + ')', end=' ')
-                self.covered.append((x, y))
-                self.uncovered.remove((x, y))
+                self.covered.append((id, x, y))
+                self.uncovered.remove((id, x, y))
                 cx.append(x)
                 cy.append(y)
             else:
@@ -182,9 +186,11 @@ class Candidate:
 
 # 가장 많은 점을 커버하는
 def max_coverage(wall, C):
+
     max_covered_points = 0
     candidates = []
     final_candidates = []
+
     for c in C:
         covered_points = c.cover_amount(wall)
         if covered_points >= max_covered_points:
@@ -192,6 +198,7 @@ def max_coverage(wall, C):
             candidates.append(c)
         else:
             continue
+
     for c in candidates:
         covered_points = c.cover_amount(wall)
         if covered_points == max_covered_points:
@@ -249,18 +256,14 @@ def setting(circle):
 
 
 if __name__ == "__main__":
-    file_name = 'smooth_curve4'
+    file_name = 'smooth_curve12'
     input_wall = open_file(file_name, 'obj')
     print(f'Opened file {file_name}')
-    x_wall, y_wall = plot_wall_draw(input_wall)
+    x_wall, y_wall = plot_wall(input_wall)
 
     x = generate_interval(x_wall)
     y = generate_interval(y_wall)
     wall = Wall(x, y)
-
-    # 그리기 관련 부분
-    fig = plt.figure(figsize=(8, 3))
-    axes = plt.gca()
 
     # 후보 생성 및 그리디 알고리즘 적용
     C = Candidate( wall, input_wall)
@@ -273,12 +276,6 @@ if __name__ == "__main__":
     iiwa_range_list = to_iiwa_range(min_x_list, max_x_list)
     # 그리는 부분
     plt.plot(x, y, color="grey")
-    # plt.grid(True)
     plt.gca().set_aspect('equal', adjustable='box')
     plt.show()
 
-    # print()
-    # print(min_x_list)
-    # print(max_x_list)
-    #
-    # print(iiwa_range_list)
