@@ -5,14 +5,13 @@ import numpy as np
 
 from tools import *
 
-
 class Iidgeback:
     def __init__(self, id, rx, ry, wall, radius=0.622):
         self.id = id
         self.r_center = [rx, ry]
         self.i_center = [rx, ry]
         self.r_radius = radius
-        self.i_radius = 0.6
+        self.i_radius = 0.4
         self.cover_wall_amount = 0
         self.cover_point = []
         self.min_x = 0
@@ -39,27 +38,21 @@ class Iidgeback:
 
         direction = (y2-y1)/(x2-x1)
 
-        if direction >= 0:
-            self.r_center[0] = self.i_center[0] + hypot*math.cos(self.angle)
-            self.r_center[1] = self.i_center[1] - hypot*math.sin(self.angle)
-            count = 1
-            # while not self.ridgeback_can_go():
-            #     # noise = random.randint(1, 30)
-            #     self.r_center[0] = self.r_center[0] + 0.001
-            #     count += 1
-            #     if count >1000:
-            #         raise ValueError('Path Cannot be Generated')
-
-        else:
+        if direction <= 0:
             self.r_center[0] = self.i_center[0] - hypot*math.cos(self.angle)
-            self.r_center[1] = self.i_center[1] - hypot*math.sin(self.angle)
-            count = 0
-            # while not self.ridgeback_can_go():
-            #     # noise = random.randint(1, 30)
-            #     self.r_center[0] = self.r_center[0] + 0.001
-            #     count +=1
-            #     if count >1000:
-            #         raise ValueError('Path Cannot be Generated')
+            self.r_center[1] = self.i_center[1] + hypot*math.sin(self.angle)
+            if not self.ridgeback_can_go():
+                self.r_center[0] = self.i_center[0] - hypot * math.cos(self.angle)
+                self.r_center[1] = self.i_center[1] - hypot * math.sin(self.angle)
+        else:
+            self.r_center[0] = self.i_center[0] + hypot*math.cos(self.angle)
+            self.r_center[1] = self.i_center[1] + hypot*math.sin(self.angle)
+            if not self.ridgeback_can_go():
+                self.r_center[0] = self.i_center[0] + hypot * math.cos(self.angle)
+                self.r_center[1] = self.i_center[1] - hypot * math.sin(self.angle)
+        if not self.ridgeback_can_go():
+            plt.show()
+            # raise "Ridgeback Cannot generate Path"
 
     # 벽과 거리를 두기 위한 함수
     def in_limit(self, i, j):
@@ -185,6 +178,7 @@ class Candidate:
     def draw_candidates(self):
         for i in self.candidate:
             i.print_map()
+
 class RidgebackCandidate:
     def __init__(self, wall, input_wall):
         self.wall = wall
@@ -249,9 +243,6 @@ def greedy_cover_iiwa(wall, C):
         max_circle = max_coverage(wall, C.candidate)
         if max_circle == None:
             return steps
-        # plt.scatter(max_circle.i_center[0], max_circle.i_center[1], s=1)
-        # max_circle.print_map()
-
         wall.add_covered(max_circle)
         C.delete_c(max_circle)
         steps.append(max_circle)
@@ -278,10 +269,12 @@ def generate_interval(wall, count=4):
 
 
 if __name__ == "__main__":
-    file_name = 'smooth_curve12'
+    file_name = 'smooth_wall_3'
     input_wall = open_file(file_name, 'obj')
     print(f'Opened file {file_name}')
-    x_wall, y_wall = plot_wall(input_wall)
+    x_wall, y_wall = plot_wall_draw(input_wall)
+
+    plt.gca().set_aspect('equal', adjustable='box')
 
     x = generate_interval(x_wall)
     y = generate_interval(y_wall)
@@ -302,6 +295,6 @@ if __name__ == "__main__":
     iiwa_range_list = to_iiwa_range(min_x_list, max_x_list)
     # 그리는 부분
     plt.plot(x, y, color="grey")
-    plt.gca().set_aspect('equal', adjustable='box')
+
     plt.show()
 
