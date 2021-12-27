@@ -1,7 +1,11 @@
 def open_file(filename, fileext):
+    import os
+
+    cwd = os.getcwd()  # Get the current working directory (cwd)
+    # files = os.listdir(cwd) 
     point = []
     wall = []
-    with open('../input/' + filename + '.' + fileext) as f:
+    with open(cwd+'/ridgeback_trajectory_planning/input/' + filename + '.' + fileext) as f:
         for line in f:
             if line[0] != 'v':
                 continue
@@ -87,10 +91,10 @@ def to_gazebo_cmd_format(steps):
         print(round(s.i_center[1], 3), end=', ')
     print('\nangle:')
     for s in sorted_path:
-        print(math.degrees(s.angle), end=', ')
-    print('\nrad:')
-    for s in sorted_path:
-        print(s.angle, end=', ')
+        print(s.direction+' '+str(math.degrees(s.angle)), end=', ')
+    # print('\nrad:')
+    # for s in sorted_path:
+    #     print(s.direction+' '+str(s.angle), end=', ')
 
     return min_x_list, max_x_list
 
@@ -98,6 +102,8 @@ def to_iiwa_range(min_x_list, max_x_list):
     to_iiwa=[]
     for i in range(len(min_x_list)-1):
         to_iiwa.append((max_x_list[i]+min_x_list[i+1])/2)
+    print('\nto iiwa:')
+    print(to_iiwa)
     return to_iiwa
 
 

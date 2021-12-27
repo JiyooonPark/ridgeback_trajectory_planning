@@ -1,4 +1,3 @@
-import random
 import time
 
 import numpy as np
@@ -24,7 +23,6 @@ class Iidgeback:
         id, x2, y2 = self.cover_point[-1]
 
         hypot = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
-        # print('hypot', hypot, 'x1-x1', x2-x1)
         angle = math.acos((x2-x1)/hypot)
         self.angle = math.pi/2 - angle
         print('--------------------angle: ',math.degrees(self.angle))
@@ -41,17 +39,21 @@ class Iidgeback:
         if direction <= 0:
             self.r_center[0] = self.i_center[0] - hypot*math.cos(self.angle)
             self.r_center[1] = self.i_center[1] + hypot*math.sin(self.angle)
+            self.direction = 'l'
             if not self.ridgeback_can_go():
                 self.r_center[0] = self.i_center[0] - hypot * math.cos(self.angle)
                 self.r_center[1] = self.i_center[1] - hypot * math.sin(self.angle)
+                self.direction = 'r'
         else:
             self.r_center[0] = self.i_center[0] + hypot*math.cos(self.angle)
             self.r_center[1] = self.i_center[1] + hypot*math.sin(self.angle)
+            self.direction = 'r'
             if not self.ridgeback_can_go():
                 self.r_center[0] = self.i_center[0] + hypot * math.cos(self.angle)
                 self.r_center[1] = self.i_center[1] - hypot * math.sin(self.angle)
-        if not self.ridgeback_can_go():
-            plt.show()
+                self.direction = 'l'
+        # if not self.ridgeback_can_go():
+        #     plt.show()
             # raise "Ridgeback Cannot generate Path"
 
     # 벽과 거리를 두기 위한 함수
@@ -236,9 +238,13 @@ def max_coverage(wall, C):
 
 # 실제로 다음 원을 선택하는 그리디 알고리즘
 def greedy_cover_iiwa(wall, C):
+
     print('in greedy')
+
     t_start = time.time()
+
     steps = []
+    
     while not wall.allcovered():
         max_circle = max_coverage(wall, C.candidate)
         if max_circle == None:
@@ -269,7 +275,8 @@ def generate_interval(wall, count=4):
 
 
 if __name__ == "__main__":
-    file_name = 'smooth_wall_3'
+
+    file_name = 'smooth_curve10'
     input_wall = open_file(file_name, 'obj')
     print(f'Opened file {file_name}')
     x_wall, y_wall = plot_wall_draw(input_wall)
@@ -280,10 +287,6 @@ if __name__ == "__main__":
     y = generate_interval(y_wall)
     wall = Wall(x, y)
 
-    # 그리기 관련 부분
-    # fig = plt.figure(figsize=(8, 3))
-    # axes = plt.gca()
-
     # 후보 생성 및 그리디 알고리즘 적용
     C = Candidate( wall, input_wall)
     # C.draw_candidates()
@@ -293,6 +296,7 @@ if __name__ == "__main__":
     min_x_list, max_x_list = to_gazebo_cmd_format(steps)
 
     iiwa_range_list = to_iiwa_range(min_x_list, max_x_list)
+
     # 그리는 부분
     plt.plot(x, y, color="grey")
 
